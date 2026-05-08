@@ -77,9 +77,10 @@ export default function App() {
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [showPassword, setShowPassword] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [pendingAction, setPendingAction] = useState<'OPEN_MOCKUP' | null>(null);
 
   useEffect(() => {
-    if (isMobileMenuOpen) {
+    if (isMobileMenuOpen || isModalOpen || isAuthModalOpen || isAdminPanelOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -87,20 +88,26 @@ export default function App() {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, isModalOpen, isAuthModalOpen, isAdminPanelOpen]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         const profile = await getUserProfile(firebaseUser.uid);
         setUser(profile);
+        
+        // Fulfill pending action if one exists
+        if (pendingAction === 'OPEN_MOCKUP') {
+          setIsModalOpen(true);
+          setPendingAction(null);
+        }
       } else {
         setUser(null);
       }
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [pendingAction]);
 
   const refreshLeads = async () => {
     if (user?.role === 'admin') {
@@ -117,6 +124,7 @@ export default function App() {
 
   const handleOpenMockup = () => {
     if (!user) {
+      setPendingAction('OPEN_MOCKUP');
       setAuthMode('signup');
       setIsAuthModalOpen(true);
     } else {
@@ -488,7 +496,7 @@ export default function App() {
 
                 <button 
                   onClick={() => setIsAdminPanelOpen(false)}
-                  className="hidden md:block p-2 hover:text-brand-primary transition-colors"
+                  className="absolute top-8 right-8 md:static p-2 hover:text-brand-primary transition-colors flex-shrink-0"
                 >
                   <X className="w-8 h-8" />
                 </button>
@@ -738,14 +746,13 @@ export default function App() {
                   </button>
                 </div>
               )}
-              {user && (
-                <button 
-                  onClick={() => { handleOpenMockup(); setIsMobileMenuOpen(false); }}
-                  className="w-full py-5 bg-brand-primary text-bg-base font-black uppercase tracking-widest"
-                >
-                  Get Mockup Design
-                </button>
-              )}
+              
+              <button 
+                onClick={() => { handleOpenMockup(); setIsMobileMenuOpen(false); }}
+                className="w-full py-5 bg-brand-primary text-bg-base font-black uppercase tracking-widest"
+              >
+                Get Mockup Design
+              </button>
             </div>
           </motion.div>
         )}
