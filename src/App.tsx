@@ -654,12 +654,12 @@ export default function App() {
       </AnimatePresence>
 
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out border-b border-white/5 bg-bg-base/80 backdrop-blur-md ${
+      <nav className={`fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-bg-base/80 backdrop-blur-md ${
         isNavShrunk ? 'py-3 md:py-4 px-6' : 'py-6 px-6'
       }`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className={`flex items-center gap-2 transition-all duration-500 ease-in-out ${isNavShrunk ? 'scale-90 origin-left' : 'scale-100'}`}>
-            <div className={`flex items-center justify-center overflow-hidden transition-all duration-500 ease-in-out ${
+          <div className={`flex items-center gap-2 ${isNavShrunk ? 'scale-90 origin-left' : 'scale-100'}`}>
+            <div className={`flex items-center justify-center overflow-hidden ${
               isNavShrunk ? 'w-8 h-8 md:w-10 md:h-10' : 'w-12 h-12'
             }`}>
               <img 
@@ -675,12 +675,12 @@ export default function App() {
                 }}
               />
             </div>
-            <span className={`font-display font-bold tracking-tight uppercase transition-all duration-500 ease-in-out ${
+            <span className={`font-display font-bold tracking-tight uppercase ${
               isNavShrunk ? 'text-lg md:text-xl' : 'text-xl'
             }`}>Consult Prompts</span>
           </div>
           
-          <div className={`hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-ink-muted transition-all duration-500 ease-in-out ${
+          <div className={`hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-ink-muted ${
             isNavShrunk ? 'opacity-90' : 'opacity-100'
           }`}>
             <a href="#process" className="hover:text-brand-primary transition-colors">Process</a>
@@ -730,7 +730,7 @@ export default function App() {
             onClick={() => setIsMobileMenuOpen(true)}
             className="md:hidden p-2 text-white"
           >
-            <Menu className={`${isNavShrunk ? 'w-6 h-6' : 'w-8 h-8'} transition-all duration-500 ease-in-out`} />
+            <Menu className={`${isNavShrunk ? 'w-6 h-6' : 'w-8 h-8'}`} />
           </button>
         </div>
       </nav>
