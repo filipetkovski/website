@@ -1,0 +1,40 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with role management",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["customer", "admin"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "Potential client lead from the mockup request form.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "ID of the user who requested the mockup" },
+        "name": { "type": "string", "description": "Full name of the lead" },
+        "email": { "type": "string", "format": "email", "description": "Contact email" },
+        "business": { "type": "string", "description": "Name or type of the business" },
+        "message": { "type": "string", "description": "Additional notes or project details" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the lead was submitted" }
+      },
+      "required": ["userId", "name", "email", "business"]
+    }
+  },
+  "firestore": {
+    "users": {
+      "schema": "User",
+      "description": "Collection of user profiles."
+    },
+    "leads": {
+      "schema": "Lead",
+      "description": "Collection of incoming project leads."
+    }
+  }
+}

@@ -1,0 +1,40 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: 
+      - 'build'
+      - '--build-arg'
+      - 'VITE_APIKEY=$_VITE_APIKEY'
+      - '--build-arg'
+      - 'VITE_AUTHDOMAIN=$_VITE_AUTHDOMAIN'
+      - '--build-arg'
+      - 'VITE_PROJECTID=$_VITE_PROJECTID'
+      - '--build-arg'
+      - 'VITE_STORAGEBUCKET=$_VITE_STORAGEBUCKET'
+      - '--build-arg'
+      - 'VITE_MESSAGINGSENDERID=$_VITE_MESSAGINGSENDERID'
+      - '--build-arg'
+      - 'VITE_APPID=$_VITE_APPID'
+      - '--build-arg'
+      - 'VITE_FIRESTOREDATABASEID=$_VITE_FIRESTOREDATABASEID'
+      - '-t'
+      - 'gcr.io/gen-lang-client-0456934902/website'
+      - '.'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/gen-lang-client-0456934902/website']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'website'
+      - '--image'
+      - 'gcr.io/gen-lang-client-0456934902/website'
+      - '--region'
+      - 'europe-west1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+images:
+  - 'gcr.io/gen-lang-client-0456934902/website'
+options:
+  logging: CLOUD_LOGGING_ONLY
