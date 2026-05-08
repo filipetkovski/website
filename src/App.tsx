@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Zap, 
@@ -79,7 +79,8 @@ export default function App() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<'OPEN_MOCKUP' | null>(null);
   const [isNavShrunk, setIsNavShrunk] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -87,25 +88,34 @@ export default function App() {
       
       if (currentScrollY <= 0) {
         setIsNavShrunk(false);
-        setLastScrollY(0);
+        lastScrollY.current = 0;
+        ticking.current = false;
         return;
       }
 
       // Shrink if scrolling down, grow if scrolling up
-      // We use a small threshold (5px) to avoid jittering
-      if (Math.abs(currentScrollY - lastScrollY) > 5) {
-        if (currentScrollY > lastScrollY) {
+      // We use a small threshold (10px) to avoid jittering
+      if (Math.abs(currentScrollY - lastScrollY.current) > 10) {
+        if (currentScrollY > lastScrollY.current) {
           setIsNavShrunk(true);
         } else {
           setIsNavShrunk(false);
         }
-        setLastScrollY(currentScrollY);
+        lastScrollY.current = currentScrollY;
+      }
+      ticking.current = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking.current) {
+        window.requestAnimationFrame(handleScroll);
+        ticking.current = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     const isAnyModalOpen = isMobileMenuOpen || isModalOpen || isAuthModalOpen || isAdminPanelOpen;
@@ -644,12 +654,12 @@ export default function App() {
       </AnimatePresence>
 
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-white/5 bg-bg-base/80 backdrop-blur-md ${
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out border-b border-white/5 bg-bg-base/80 backdrop-blur-md ${
         isNavShrunk ? 'py-3 md:py-4 px-6' : 'py-6 px-6'
       }`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className={`flex items-center gap-2 transition-all duration-300 ${isNavShrunk ? 'scale-90 origin-left' : 'scale-100'}`}>
-            <div className={`flex items-center justify-center overflow-hidden transition-all duration-300 ${
+          <div className={`flex items-center gap-2 transition-all duration-500 ease-in-out ${isNavShrunk ? 'scale-90 origin-left' : 'scale-100'}`}>
+            <div className={`flex items-center justify-center overflow-hidden transition-all duration-500 ease-in-out ${
               isNavShrunk ? 'w-8 h-8 md:w-10 md:h-10' : 'w-12 h-12'
             }`}>
               <img 
@@ -665,12 +675,12 @@ export default function App() {
                 }}
               />
             </div>
-            <span className={`font-display font-bold tracking-tight uppercase transition-all duration-300 ${
+            <span className={`font-display font-bold tracking-tight uppercase transition-all duration-500 ease-in-out ${
               isNavShrunk ? 'text-lg md:text-xl' : 'text-xl'
             }`}>Consult Prompts</span>
           </div>
           
-          <div className={`hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-ink-muted transition-all duration-300 ${
+          <div className={`hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-ink-muted transition-all duration-500 ease-in-out ${
             isNavShrunk ? 'opacity-90' : 'opacity-100'
           }`}>
             <a href="#process" className="hover:text-brand-primary transition-colors">Process</a>
@@ -720,7 +730,7 @@ export default function App() {
             onClick={() => setIsMobileMenuOpen(true)}
             className="md:hidden p-2 text-white"
           >
-            <Menu className={`${isNavShrunk ? 'w-6 h-6' : 'w-8 h-8'} transition-all duration-300`} />
+            <Menu className={`${isNavShrunk ? 'w-6 h-6' : 'w-8 h-8'} transition-all duration-500 ease-in-out`} />
           </button>
         </div>
       </nav>
