@@ -85,14 +85,22 @@ export default function App() {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // On mobile, we shrink when scrolling down, and grow back when scrolling up
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        setIsNavShrunk(true);
-      } else if (currentScrollY < lastScrollY) {
+      if (currentScrollY <= 0) {
         setIsNavShrunk(false);
+        setLastScrollY(0);
+        return;
       }
-      
-      setLastScrollY(currentScrollY);
+
+      // Shrink if scrolling down, grow if scrolling up
+      // We use a small threshold (5px) to avoid jittering
+      if (Math.abs(currentScrollY - lastScrollY) > 5) {
+        if (currentScrollY > lastScrollY) {
+          setIsNavShrunk(true);
+        } else {
+          setIsNavShrunk(false);
+        }
+        setLastScrollY(currentScrollY);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
