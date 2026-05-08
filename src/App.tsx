@@ -80,13 +80,20 @@ export default function App() {
   const [pendingAction, setPendingAction] = useState<'OPEN_MOCKUP' | null>(null);
 
   useEffect(() => {
-    if (isMobileMenuOpen || isModalOpen || isAuthModalOpen || isAdminPanelOpen) {
+    const isAnyModalOpen = isMobileMenuOpen || isModalOpen || isAuthModalOpen || isAdminPanelOpen;
+    if (isAnyModalOpen) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
     } else {
       document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
+      document.body.style.touchAction = 'unset';
     }
     return () => {
       document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
+      document.body.style.touchAction = 'unset';
     };
   }, [isMobileMenuOpen, isModalOpen, isAuthModalOpen, isAdminPanelOpen]);
 
@@ -496,7 +503,7 @@ export default function App() {
 
                 <button 
                   onClick={() => setIsAdminPanelOpen(false)}
-                  className="absolute top-8 right-8 md:static p-2 hover:text-brand-primary transition-colors flex-shrink-0"
+                  className="absolute top-6 right-6 md:static z-[60] p-2 bg-bg-surface md:bg-transparent border border-white/10 md:border-none rounded-full hover:text-brand-primary transition-colors flex-shrink-0"
                 >
                   <X className="w-8 h-8" />
                 </button>
