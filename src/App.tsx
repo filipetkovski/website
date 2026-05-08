@@ -78,6 +78,26 @@ export default function App() {
   const [showPassword, setShowPassword] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<'OPEN_MOCKUP' | null>(null);
+  const [isNavShrunk, setIsNavShrunk] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // On mobile, we shrink when scrolling down, and grow back when scrolling up
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        setIsNavShrunk(true);
+      } else if (currentScrollY < lastScrollY) {
+        setIsNavShrunk(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   useEffect(() => {
     const isAnyModalOpen = isMobileMenuOpen || isModalOpen || isAuthModalOpen || isAdminPanelOpen;
@@ -616,10 +636,14 @@ export default function App() {
       </AnimatePresence>
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-6 border-b border-white/5 bg-bg-base/80 backdrop-blur-md">
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-white/5 bg-bg-base/80 backdrop-blur-md ${
+        isNavShrunk ? 'py-3 md:py-4 px-6' : 'py-6 px-6'
+      }`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
+          <div className={`flex items-center gap-2 transition-all duration-300 ${isNavShrunk ? 'scale-90 origin-left' : 'scale-100'}`}>
+            <div className={`flex items-center justify-center overflow-hidden transition-all duration-300 ${
+              isNavShrunk ? 'w-8 h-8 md:w-10 md:h-10' : 'w-12 h-12'
+            }`}>
               <img 
                 src={logoSrc} 
                 alt="CP Logo" 
@@ -633,10 +657,14 @@ export default function App() {
                 }}
               />
             </div>
-            <span className="font-display font-bold text-xl tracking-tight uppercase">Consult Prompts</span>
+            <span className={`font-display font-bold tracking-tight uppercase transition-all duration-300 ${
+              isNavShrunk ? 'text-lg md:text-xl' : 'text-xl'
+            }`}>Consult Prompts</span>
           </div>
           
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-ink-muted">
+          <div className={`hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-ink-muted transition-all duration-300 ${
+            isNavShrunk ? 'opacity-90' : 'opacity-100'
+          }`}>
             <a href="#process" className="hover:text-brand-primary transition-colors">Process</a>
             <a href="#pricing" className="hover:text-brand-primary transition-colors">Pricing</a>
             <a href="#faq" className="hover:text-brand-primary transition-colors">FAQ</a>
@@ -684,7 +712,7 @@ export default function App() {
             onClick={() => setIsMobileMenuOpen(true)}
             className="md:hidden p-2 text-white"
           >
-            <Menu className="w-8 h-8" />
+            <Menu className={`${isNavShrunk ? 'w-6 h-6' : 'w-8 h-8'} transition-all duration-300`} />
           </button>
         </div>
       </nav>
