@@ -79,6 +79,17 @@ export default function App() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         const profile = await getUserProfile(firebaseUser.uid);
@@ -389,14 +400,16 @@ export default function App() {
                 </div>
                 <div className="space-y-1 relative">
                   <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary">Password</label>
-                  <input required name="password" type={showPassword ? 'text' : 'password'} className="w-full bg-white/5 border border-white/10 p-2.5 md:p-3 font-light focus:border-brand-primary outline-none transition-colors text-sm" placeholder="••••••••" />
-                  <button 
-                    type="button" 
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-[30px] md:top-[34px] text-ink-muted hover:text-white"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
+                  <div className="relative">
+                    <input required name="password" type={showPassword ? 'text' : 'password'} className="w-full bg-white/5 border border-white/10 p-2.5 md:p-3 font-light focus:border-brand-primary outline-none transition-colors text-sm pr-10" placeholder="••••••••" />
+                    <button 
+                      type="button" 
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-white"
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
                 </div>
                 <button 
                   disabled={isSubmitting}
@@ -538,43 +551,52 @@ export default function App() {
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-brand-secondary/5 rounded-full blur-[120px]" />
       </div>
 
-      {/* Profile Menu */}
+      {/* Profile Menu Overlay */}
       <AnimatePresence>
         {isProfileOpen && user && (
-          <div className="fixed inset-0 z-[160] flex items-end justify-center p-6 md:items-start md:justify-end md:p-24 overflow-hidden pointer-events-none">
+          <>
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              className="w-full max-w-sm glass border-brand-primary/20 pointer-events-auto shadow-2xl p-8"
-            >
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-full bg-brand-primary flex items-center justify-center text-bg-base font-black text-xl">
-                  {user.displayName?.charAt(0) || user.email.charAt(0).toUpperCase()}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsProfileOpen(false)}
+              className="fixed inset-0 z-[155] bg-transparent"
+            />
+            <div className="fixed inset-0 z-[160] flex items-end justify-center p-6 md:items-start md:justify-end md:p-24 overflow-hidden pointer-events-none">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="w-full max-w-sm glass border-brand-primary/20 pointer-events-auto shadow-2xl p-8"
+              >
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-12 h-12 rounded-full bg-brand-primary flex items-center justify-center text-bg-base font-black text-xl">
+                    {user.displayName?.charAt(0) || user.email.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <h4 className="font-display font-bold italic">{user.displayName || 'Prophet'}</h4>
+                    <p className="text-xs text-ink-muted tracking-widest uppercase">{user.role}</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-display font-bold italic">{user.displayName || 'Prophet'}</h4>
-                  <p className="text-xs text-ink-muted tracking-widest uppercase">{user.role}</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                {user.role === 'admin' && (
+                <div className="space-y-4">
+                  {user.role === 'admin' && (
+                    <button 
+                      onClick={() => { setIsAdminPanelOpen(true); setIsProfileOpen(false); }}
+                      className="w-full flex items-center gap-3 p-4 bg-white/5 hover:bg-brand-primary hover:text-bg-base transition-all font-bold text-xs uppercase tracking-widest"
+                    >
+                      <LayoutDashboard className="w-4 h-4" /> Admin Console
+                    </button>
+                  )}
                   <button 
-                    onClick={() => { setIsAdminPanelOpen(true); setIsProfileOpen(false); }}
-                    className="w-full flex items-center gap-3 p-4 bg-white/5 hover:bg-brand-primary hover:text-bg-base transition-all font-bold text-xs uppercase tracking-widest"
+                    onClick={() => { auth.signOut(); setIsProfileOpen(false); }}
+                    className="w-full flex items-center gap-3 p-4 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-all font-bold text-xs uppercase tracking-widest"
                   >
-                    <LayoutDashboard className="w-4 h-4" /> Admin Console
+                    <LogOut className="w-4 h-4" /> Log Out Signal
                   </button>
-                )}
-                <button 
-                  onClick={() => { auth.signOut(); setIsProfileOpen(false); }}
-                  className="w-full flex items-center gap-3 p-4 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-all font-bold text-xs uppercase tracking-widest"
-                >
-                  <LogOut className="w-4 h-4" /> Log Out Signal
-                </button>
-              </div>
-            </motion.div>
-          </div>
+                </div>
+              </motion.div>
+            </div>
+          </>
         )}
       </AnimatePresence>
 
