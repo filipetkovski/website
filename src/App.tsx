@@ -847,8 +847,7 @@ export default function App() {
               Accepting new partners.
             </div>
             <h1 className="font-display text-5xl sm:text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-8">
-              <span className="block text-brand-primary text-sm uppercase tracking-[0.3em] font-black mb-4">ConsultPrompts</span>
-              Why settle for a <span className="text-ink-muted italic">mediocre site</span> when you can have a <span className="text-brand-primary">beast?</span>
+              Why settle for a <span className="text-ink-muted italic">mediocre site</span> when you can have <span className="text-brand-primary">a beast?</span>
             </h1>
             <p className="text-base md:text-xl text-ink-muted max-w-xl mb-10 leading-relaxed font-light">
               Don't pay $5,000 to a slow agency. Get a <span className="font-medium text-white">high-performance, mobile-optimized website</span> for your local business in <span className="text-white font-medium italic underline decoration-brand-primary underline-offset-4 whitespace-nowrap">72 hours</span>.
