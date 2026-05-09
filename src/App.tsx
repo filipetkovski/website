@@ -849,7 +849,7 @@ export default function App() {
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-8">
               Why settle for a <span className="text-ink-muted italic">mediocre site</span> when you can have a <span className="text-brand-primary">beast?</span>
             </h1>
-            <p className="text-xl text-ink-muted max-w-xl mb-10 leading-relaxed font-light">
+            <p className="text-base md:text-xl text-ink-muted max-w-xl mb-10 leading-relaxed font-light">
               Don't pay $5,000 to a slow agency. Get a <span className="font-medium text-white">high-performance, mobile-optimized website</span> for your local business in <span className="text-white font-medium italic underline decoration-brand-primary underline-offset-4 whitespace-nowrap">72 hours</span>.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -935,6 +935,12 @@ export default function App() {
             <h2 className="font-display text-3xl md:text-6xl font-bold mb-6 italic">Simple. Brutal. Fast Web Design.</h2>
             <p className="text-ink-muted text-base md:text-lg max-w-2xl font-light">We've automated the fluff out of local business web design. Here's how we get your new site live in record time.</p>
           </motion.div>
+
+          {/* Slide Indicator for Mobile */}
+          <div className="lg:hidden flex items-center gap-3 mb-8 opacity-60">
+            <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-brand-primary italic">Slide</span>
+            <div className="h-[1.5px] w-12 bg-brand-primary" />
+          </div>
 
           <div className="flex md:flex-row overflow-x-auto lg:grid lg:grid-cols-3 gap-8 md:gap-12 pb-8 lg:pb-0 snap-x snap-mandatory brutalist-scrollbar scroll-smooth">
             {processSteps.map((step, i) => (
@@ -1030,6 +1036,12 @@ export default function App() {
             <h2 className="font-display text-3xl md:text-6xl font-bold mb-6 italic">Real World Business RESULTS.</h2>
             <p className="text-ink-muted text-base md:text-lg max-w-2xl font-light">We don't just build sites; we build business success stories. Here's what our clients say after going live.</p>
           </motion.div>
+
+          {/* Slide Indicator for Mobile */}
+          <div className="lg:hidden flex items-center gap-3 mb-8 opacity-60">
+            <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-brand-primary italic">Slide</span>
+            <div className="h-[1.5px] w-12 bg-brand-primary" />
+          </div>
 
           <div className="flex md:flex-row overflow-x-auto lg:grid lg:grid-cols-3 gap-8 pb-8 lg:pb-0 snap-x snap-mandatory brutalist-scrollbar scroll-smooth">
             {[
