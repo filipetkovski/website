@@ -345,7 +345,10 @@ export default function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsModalOpen(false)}
+              onClick={() => {
+                setIsModalOpen(false);
+                setSubmitted(false);
+              }}
               className="absolute inset-0 bg-bg-base/90 backdrop-blur-sm"
             />
             <motion.div 
@@ -355,7 +358,10 @@ export default function App() {
               className="relative w-full max-w-lg glass p-8 md:p-12 rounded-sm border-brand-primary/30 z-10"
             >
               <button 
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setSubmitted(false);
+                }}
                 className="absolute top-6 right-6 text-ink-muted hover:text-white transition-colors"
               >
                 <X className="w-6 h-6" />
@@ -430,7 +436,7 @@ export default function App() {
                       className="w-full py-4 bg-green-500 text-bg-base font-black uppercase tracking-widest hover:bg-green-400 transition-colors flex items-center justify-center gap-2 rounded-lg"
                     >
                       <MessageCircle className="w-5 h-5" />
-                      Send Brand Assets via WhatsApp
+                      Chat on WhatsApp
                     </a>
 
                     <button 
