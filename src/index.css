@@ -51,3 +51,8 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Ensures momentum scrolling on older iOS versions */
+}
