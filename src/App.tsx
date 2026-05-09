@@ -1174,7 +1174,7 @@ export default function App() {
               </div>
               <div className="min-w-0">
                 <span className="text-[10px] uppercase tracking-widest font-bold text-ink-muted block mb-1">WhatsApp Chat</span>
-                <span className="text-sm md:text-base lg:text-lg font-display font-bold truncate block">+1 (302) 662 02736</span>
+                <span className="text-sm md:text-base lg:text-lg font-display font-bold truncate block">+1 (302) 662 2736</span>
               </div>
             </a>
           </div>
