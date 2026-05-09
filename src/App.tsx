@@ -226,30 +226,30 @@ export default function App() {
     }
   };
 
-  const heroPanels = [
+  const reviews = [
     {
-      title: "Mobile-First, Always.",
-      description: "Most customers book on their phones. We build for that reality first, not as an afterthought.",
-      icon: <Smartphone className="w-12 h-12 text-brand-primary" />,
-      color: "from-brand-primary/20 to-brand-secondary/20"
+      client: "Aura Nails",
+      quote: "The speed is insane. We saw a 40% increase in online bookings in the first week. The mobile version is flawless.",
+      image: "https://images.unsplash.com/photo-1604076913837-52ab5629fba9?auto=format&fit=crop&q=80&w=600",
+      business: "Beauty & Wellness"
     },
     {
-      title: "Blazing Fast Load.",
-      description: "Speed kills competition. Our sites score 90+ on Lighthouse, ensuring you never lose a lead to lag.",
-      icon: <Zap className="w-12 h-12 text-brand-primary" />,
-      color: "from-yellow-400/20 to-orange-500/20"
+      client: "Prime Gym",
+      quote: "Best $299 I ever spent. The mobile performance is better than my previous $3k site. Highly recommended.",
+      image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600",
+      business: "Fitness Center"
     },
     {
-      title: "Built to Convert.",
-      description: "We don't just build pretty boxes. We build sales machines with high-impact CTAs and clear paths.",
-      icon: <Rocket className="w-12 h-12 text-brand-primary" />,
-      color: "from-brand-secondary/20 to-pink-500/20"
+      client: "Zen Coffee",
+      quote: "Professional, fast, and converts like crazy. Filip knows exactly what a local business needs to stand out.",
+      image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=600",
+      business: "Specialty Coffee"
     }
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActivePanel((prev) => (prev + 1) % heroPanels.length);
+      setActivePanel((prev) => (prev + 1) % reviews.length);
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -318,12 +318,12 @@ export default function App() {
           "@type": "WebAgency",
           "name": "ConsultPrompts",
           "description": "High-performance web design for local businesses. $299 flat fee, 72-hour delivery.",
-          "url": "https://consultprompts.com",
-          "image": "https://consultprompts.com/favicon.png",
+          "url": window.location.origin,
+          "image": `${window.location.origin}/favicon.png`,
           "priceRange": "$299",
           "address": {
             "@type": "PostalAddress",
-            "addressCountry": "US"
+            "addressCountry": "Global"
           },
           "offers": {
             "@type": "Offer",
@@ -689,7 +689,7 @@ export default function App() {
             }`}>
               <img 
                 src={logoSrc} 
-                alt="CP Logo" 
+                alt="ConsultPrompts Logo" 
                 className="w-full h-full object-contain border-none bg-transparent"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
@@ -776,7 +776,7 @@ export default function App() {
               <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
               <img 
                 src={logoSrc} 
-                alt="CP Logo" 
+                alt="ConsultPrompts Logo" 
                 className="w-full h-full object-contain border-none bg-transparent"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
@@ -797,11 +797,11 @@ export default function App() {
             <div className="flex flex-col gap-8 text-2xl font-display font-bold italic">
               <a href="#process" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Process</a>
               <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Pricing</a>
-              <a href="#reviews" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">RESULTS</a>
-              <a href="#faq" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">FAQ</a>
+              <a href="#reviews" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Results</a>
+              <a href="#faq" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Faq</a>
               <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Contact</a>
               {user?.role === 'admin' && (
-                <button onClick={() => { setIsAdminPanelOpen(true); setIsMobileMenuOpen(false); }} className="text-left text-brand-primary">Admin Panel</button>
+                <button onClick={() => { setIsAdminPanelOpen(true); setIsMobileMenuOpen(false); }} className="text-left text-brand-primary uppercase">ADMIN PANEL</button>
               )}
             </div>
 
@@ -846,7 +846,8 @@ export default function App() {
               <div className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
               Accepting new partners.
             </div>
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-8">
+            <h1 className="font-display text-5xl sm:text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-8">
+              <span className="block text-brand-primary text-sm uppercase tracking-[0.3em] font-black mb-4">ConsultPrompts</span>
               Why settle for a <span className="text-ink-muted italic">mediocre site</span> when you can have a <span className="text-brand-primary">beast?</span>
             </h1>
             <p className="text-base md:text-xl text-ink-muted max-w-xl mb-10 leading-relaxed font-light">
@@ -870,9 +871,9 @@ export default function App() {
             initial={{ opacity: 0, scale: 0.9, rotateY: 20 }}
             whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden lg:block perspective-1000"
+            className="hidden lg:flex perspective-1000 items-center justify-center lg:justify-center"
           >
-            <div className="relative glass p-4 rounded-xl border-white/10 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700">
+            <div className="relative glass p-4 rounded-xl border-white/10 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700 w-full max-w-md">
               <div className="overflow-hidden rounded-lg">
                 <AnimatePresence mode="wait">
                   <motion.div 
@@ -881,20 +882,44 @@ export default function App() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.5 }}
-                    className="bg-bg-surface aspect-square flex flex-col items-center justify-center p-12 text-center border border-white/5"
+                    className="bg-bg-surface aspect-square flex flex-col relative group"
                   >
-                    <div className={`w-24 h-24 mb-6 rounded-full bg-linear-to-br ${heroPanels[activePanel].color} flex items-center justify-center`}>
-                      {heroPanels[activePanel].icon}
+                    <div className="absolute inset-0">
+                      <img 
+                        src={reviews[activePanel].image} 
+                        className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-700" 
+                        alt={reviews[activePanel].client}
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-linear-to-t from-bg-base via-bg-base/60 to-transparent" />
                     </div>
-                    <h3 className="font-display text-3xl font-bold mb-4 italic">{heroPanels[activePanel].title}</h3>
-                    <p className="text-ink-muted text-sm leading-relaxed">{heroPanels[activePanel].description}</p>
+                    
+                    <div className="relative mt-auto p-8 md:p-10">
+                      <div className="glass px-3 py-1 rounded inline-block text-[10px] font-bold uppercase tracking-widest text-brand-primary mb-6">
+                        {reviews[activePanel].business}
+                      </div>
+                      <p className="text-xl md:text-2xl font-display font-bold italic mb-6 leading-tight text-white">
+                        "{reviews[activePanel].quote}"
+                      </p>
+                      <div className="pt-6 border-t border-white/10 flex items-center justify-between">
+                        <div>
+                          <span className="font-display font-bold text-white block">{reviews[activePanel].client}</span>
+                          <span className="text-[10px] text-brand-primary uppercase tracking-widest font-black">Satisfied Client</span>
+                        </div>
+                        <div className="flex gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Zap key={i} className="w-3 h-3 text-brand-primary fill-current" />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </motion.div>
                 </AnimatePresence>
               </div>
               
-              {/* Carousel Dots - Moved outside AnimatePresence for stability */}
-              <div className="absolute bottom-16 left-0 right-0 flex justify-center gap-3 z-20">
-                {heroPanels.map((_, i) => (
+              {/* Carousel Dots */}
+              <div className="absolute bottom-10 left-0 right-0 flex justify-center gap-3 z-20">
+                {reviews.map((_, i) => (
                   <button 
                     key={i}
                     onClick={(e) => {
@@ -902,7 +927,7 @@ export default function App() {
                       setActivePanel(i);
                     }}
                     className={`w-2 h-2 rounded-full transition-all duration-300 relative z-30 cursor-pointer ${activePanel === i ? 'bg-brand-primary w-8' : 'bg-white/20 hover:bg-white/40'}`}
-                    aria-label={`Go to panel ${i + 1}`}
+                    aria-label={`Go to review ${i + 1}`}
                   />
                 ))}
               </div>
@@ -1044,26 +1069,7 @@ export default function App() {
           </div>
 
           <div className="flex md:flex-row overflow-x-auto lg:grid lg:grid-cols-3 gap-8 pb-8 lg:pb-0 snap-x snap-mandatory brutalist-scrollbar scroll-smooth">
-            {[
-              {
-                client: "Aura Nails",
-                quote: "The speed is insane. We saw a 40% increase in online bookings in the first week. The mobile version is flawless.",
-                image: "https://images.unsplash.com/photo-1604076913837-52ab5629fba9?auto=format&fit=crop&q=80&w=600",
-                business: "Beauty & Wellness"
-              },
-              {
-                client: "Prime Gym",
-                quote: "Best $299 I ever spent. The mobile performance is better than my previous $3k site. Highly recommended.",
-                image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600",
-                business: "Fitness Center"
-              },
-              {
-                client: "Zen Coffee",
-                quote: "Professional, fast, and converts like crazy. Filip knows exactly what a local business needs to stand out.",
-                image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=600",
-                business: "Specialty Coffee"
-              }
-            ].map((review, i) => (
+            {reviews.map((review, i) => (
               <motion.div 
                 key={review.client}
                 custom={i}
@@ -1194,7 +1200,7 @@ export default function App() {
               <div className="w-8 h-8 flex items-center justify-center overflow-hidden">
                 <img 
                   src={logoSrc} 
-                  alt="CP Logo" 
+                  alt="ConsultPrompts Logo" 
                   className="w-full h-full object-contain"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
