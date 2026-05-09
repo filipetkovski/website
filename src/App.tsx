@@ -421,15 +421,28 @@ export default function App() {
                   </div>
                   <h3 className="font-display text-3xl font-bold italic mb-4">Transmission Received</h3>
                   <p className="text-ink-muted leading-relaxed font-light mb-8">We're already analyzing your business DNA. Expect your mockup within 24-48 hours.</p>
-                  <button 
-                    onClick={() => {
-                      setIsModalOpen(false);
-                      setSubmitted(false);
-                    }}
-                    className="text-xs font-bold uppercase tracking-widest border-b border-brand-primary pb-1"
-                  >
-                    Back to Reality
-                  </button>
+                  
+                  <div className="flex flex-col gap-4 items-center">
+                    <a 
+                      href="https://wa.me/13026622736" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-full py-4 bg-green-500 text-bg-base font-black uppercase tracking-widest hover:bg-green-400 transition-colors flex items-center justify-center gap-2 rounded-lg"
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      Send Brand Assets via WhatsApp
+                    </a>
+
+                    <button 
+                      onClick={() => {
+                        setIsModalOpen(false);
+                        setSubmitted(false);
+                      }}
+                      className="text-xs font-bold uppercase tracking-widest border-b border-brand-primary pb-1 hover:text-brand-primary hover:border-white transition-colors"
+                    >
+                      Back Home
+                    </button>
+                  </div>
                 </div>
               )}
             </motion.div>
