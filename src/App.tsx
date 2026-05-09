@@ -848,7 +848,7 @@ export default function App() {
               Accepting new partners.
             </div>
             <h1 className="font-display text-5xl sm:text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-8">
-              Why settle for <span className="text-ink-muted italic">a mediocre site</span> when you can have a <span className="text-brand-primary">beast?</span>
+              Why settle for a <span className="text-ink-muted italic">mediocre site</span> when you can have a <span className="text-brand-primary">beast?</span>
             </h1>
             <p className="text-base md:text-xl text-ink-muted max-w-xl mb-10 leading-relaxed font-light">
               Don't pay $5,000 to a slow agency. Get a <span className="font-medium text-white">high-performance, mobile-optimized website</span> for your local business in <span className="text-white font-medium italic underline decoration-brand-primary underline-offset-4 whitespace-nowrap">72 hours</span>.
@@ -1168,7 +1168,7 @@ export default function App() {
                 <span className="text-sm md:text-base lg:text-lg font-display font-bold truncate block">@consultprompts</span>
               </div>
             </a>
-            <a href="https://wa.me/130266202736" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-6 glass brutalist-border group min-w-0">
+            <a href="https://wa.me/13026622736" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-6 glass brutalist-border group min-w-0">
               <div className="p-3 rounded bg-green-500/10 text-green-500 group-hover:bg-green-500 group-hover:text-bg-base transition-colors shrink-0">
                 <MessageCircle className="w-6 h-6" />
               </div>
@@ -1230,7 +1230,7 @@ export default function App() {
               <Mail className="w-4 h-4" />
               Email
             </a>
-            <a href="https://wa.me/130266202736" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+            <a href="https://wa.me/13026622736" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
               <MessageCircle className="w-4 h-4" />
               WhatsApp
             </a>
