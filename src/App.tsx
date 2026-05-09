@@ -839,14 +839,14 @@ export default function App() {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <header id="hero" aria-label="Hero section: Local Business Web Design Agency" className="relative pt-24 pb-16 md:pt-40 md:pb-20 px-6 overflow-hidden">
+      <header id="hero" aria-label="Hero section: Local Business Web Design Agency" className="relative pt-36 pb-16 md:pt-40 md:pb-20 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
           <motion.div {...FADE_UP}>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-primary/20 bg-brand-primary/5 text-brand-primary text-xs font-bold uppercase tracking-widest mb-6" aria-label="Service status">
               <div className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
-              Accepting new local business partners.
+              Accepting new partners.
             </div>
-            <h1 className="font-display text-4xl sm:text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight mb-8">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-8">
               Why settle for a <span className="text-ink-muted italic">mediocre site</span> when you can have a <span className="text-brand-primary">beast?</span>
             </h1>
             <p className="text-xl text-ink-muted max-w-xl mb-10 leading-relaxed font-light">
@@ -930,19 +930,19 @@ export default function App() {
       {/* Process Section */}
       <section id="process" aria-label="Our Web Design Process" className="py-16 md:py-24 px-6 relative">
         <div className="max-w-7xl mx-auto">
-          <motion.div {...FADE_UP} className="mb-12 md:mb-20 text-center md:text-left">
-            <span className="text-brand-primary text-xs font-bold uppercase tracking-widest mb-4 block">Our DNA</span>
+          <motion.div {...FADE_UP} className="mb-12 md:mb-20 text-center md:text-left relative">
+            <span className="text-brand-primary text-xs font-bold uppercase tracking-widest block mb-4">Our DNA</span>
             <h2 className="font-display text-3xl md:text-6xl font-bold mb-6 italic">Simple. Brutal. Fast Web Design.</h2>
             <p className="text-ink-muted text-base md:text-lg max-w-2xl font-light">We've automated the fluff out of local business web design. Here's how we get your new site live in record time.</p>
           </motion.div>
 
-          <div className="flex md:flex-row overflow-x-auto lg:grid lg:grid-cols-3 gap-8 md:gap-12 pb-8 lg:pb-0 snap-x snap-mandatory scrollbar-hide scroll-smooth">
+          <div className="flex md:flex-row overflow-x-auto lg:grid lg:grid-cols-3 gap-8 md:gap-12 pb-8 lg:pb-0 snap-x snap-mandatory brutalist-scrollbar scroll-smooth">
             {processSteps.map((step, i) => (
               <motion.div 
                 key={step.id} 
                 custom={i} 
                 {...STAGGER}
-                className="group p-8 brutalist-border bg-bg-surface relative overflow-hidden flex-shrink-0 w-[85vw] md:w-[60vw] lg:w-auto snap-center"
+                className="group p-8 brutalist-border bg-bg-surface relative overflow-hidden flex-shrink-0 w-[calc(100vw-3rem)] md:w-[calc(50vw-3rem)] lg:w-auto snap-start"
               >
                 <div className="absolute top-0 right-0 font-display text-8xl font-black text-white/[0.03] -translate-y-4 translate-x-4 group-hover:text-brand-primary/5 transition-colors">
                   {step.id}
@@ -962,7 +962,7 @@ export default function App() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
             <motion.div {...FADE_UP}>
               <span className="text-brand-primary text-xs font-bold uppercase tracking-widest mb-4 block">Affordable All-Inclusive Package</span>
-              <h2 className="font-display text-3xl md:text-6xl font-bold mb-8 italic leading-tight">Everything your business needs. <br/> Nothing it doesn't.</h2>
+              <h2 className="font-display text-3xl md:text-6xl font-bold mb-8 italic leading-tight">Everything you need. <br/> Nothing you don't.</h2>
               <p className="text-ink-muted mb-12 max-w-md font-light leading-relaxed">
                 We've packaged the "Modern Standard" of web features into one <span className="font-medium text-white">$299 flat price</span>. No tiers, no hidden monthly upsells for basic plugins.
               </p>
@@ -1026,12 +1026,12 @@ export default function App() {
       <section id="reviews" aria-label="Client Results and Success Stories" className="py-16 md:py-24 px-6 relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <motion.div {...FADE_UP} className="mb-12 md:mb-16 text-center lg:text-left">
-            <span className="text-brand-primary text-xs font-bold uppercase tracking-widest mb-4 block">Proven Web Performance</span>
-            <h2 className="font-display text-3xl md:text-6xl font-bold mb-6 italic italic">Real World Business RESULTS.</h2>
+            <span className="text-brand-primary text-xs font-bold uppercase tracking-widest block mb-4">Proven Web Performance</span>
+            <h2 className="font-display text-3xl md:text-6xl font-bold mb-6 italic">Real World Business RESULTS.</h2>
             <p className="text-ink-muted text-base md:text-lg max-w-2xl font-light">We don't just build sites; we build business success stories. Here's what our clients say after going live.</p>
           </motion.div>
 
-          <div className="flex md:flex-row overflow-x-auto lg:grid lg:grid-cols-3 gap-8 pb-8 lg:pb-0 snap-x snap-mandatory scrollbar-hide scroll-smooth">
+          <div className="flex md:flex-row overflow-x-auto lg:grid lg:grid-cols-3 gap-8 pb-8 lg:pb-0 snap-x snap-mandatory brutalist-scrollbar scroll-smooth">
             {[
               {
                 client: "Aura Nails",
@@ -1056,7 +1056,7 @@ export default function App() {
                 key={review.client}
                 custom={i}
                 {...STAGGER}
-                className="glass brutalist-border flex flex-col group overflow-hidden flex-shrink-0 w-[85vw] md:w-[60vw] lg:w-auto snap-center"
+                className="glass brutalist-border flex flex-col group overflow-hidden flex-shrink-0 w-[calc(100vw-3rem)] md:w-[calc(50vw-3rem)] lg:w-auto snap-start"
               >
                 <div className="aspect-video relative overflow-hidden">
                   <img 
@@ -1087,7 +1087,7 @@ export default function App() {
       <section id="faq" aria-label="Frequently Asked Questions" className="py-24 px-6 relative border-b border-white/5">
         <div className="max-w-3xl mx-auto">
           <motion.div {...FADE_UP} className="mb-16 text-center">
-            <h2 className="font-display text-4xl font-bold italic">Web Design FAQ & Expert Advice</h2>
+            <h2 className="font-display text-3xl md:text-6xl font-bold italic">Web Design FAQ.</h2>
             <p className="text-ink-muted mt-4 font-light">Everything you need to know about our high-speed development process.</p>
           </motion.div>
 
@@ -1127,7 +1127,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
           <motion.div {...FADE_UP} className="max-w-xl text-center lg:text-left">
             <span className="text-brand-primary text-xs font-bold uppercase tracking-widest mb-4 block">Direct Comms</span>
-            <h2 className="font-display text-3xl md:text-5xl font-bold mb-6 italic">No gatekeepers. <br /> Just results.</h2>
+            <h2 className="font-display text-3xl md:text-6xl font-bold mb-6 italic">No gatekeepers. <br /> Just results.</h2>
             <p className="text-ink-muted font-light leading-relaxed">Have a question about a specific integration or a custom bulk deal? Reach out to the source.</p>
           </motion.div>
           
