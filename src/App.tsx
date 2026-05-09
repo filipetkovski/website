@@ -680,11 +680,12 @@ export default function App() {
             }`}>Consult Prompts</span>
           </div>
           
-          <div className={`hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-ink-muted ${
+          <div className={`hidden xl:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-ink-muted ${
             isNavShrunk ? 'opacity-90' : 'opacity-100'
           }`}>
             <a href="#process" className="hover:text-brand-primary transition-colors">Process</a>
             <a href="#pricing" className="hover:text-brand-primary transition-colors">Pricing</a>
+            <a href="#reviews" className="hover:text-brand-primary transition-colors">RESULTS</a>
             <a href="#faq" className="hover:text-brand-primary transition-colors">FAQ</a>
             <a href="#contact" className="hover:text-brand-primary transition-colors">Contact</a>
             {user?.role === 'admin' && (
@@ -698,7 +699,7 @@ export default function App() {
             )}
           </div>
 
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden xl:flex items-center gap-4">
               <button 
                 onClick={handleOpenMockup}
                 className="text-sm font-bold uppercase tracking-widest bg-brand-primary text-bg-base px-5 py-2.5 rounded-sm hover:opacity-90 transition-opacity"
@@ -728,7 +729,7 @@ export default function App() {
           {/* Hamburger */}
           <button 
             onClick={() => setIsMobileMenuOpen(true)}
-            className="md:hidden p-2 text-white"
+            className="xl:hidden p-2 text-white"
           >
             <Menu className={`${isNavShrunk ? 'w-6 h-6' : 'w-8 h-8'}`} />
           </button>
@@ -771,6 +772,7 @@ export default function App() {
             <div className="flex flex-col gap-8 text-2xl font-display font-bold italic">
               <a href="#process" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Process</a>
               <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Pricing</a>
+              <a href="#reviews" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">RESULTS</a>
               <a href="#faq" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">FAQ</a>
               <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Contact</a>
               {user?.role === 'admin' && (
@@ -985,12 +987,73 @@ export default function App() {
                 </ul>
                 <button 
                   onClick={handleOpenMockup}
-                  className="w-full py-5 bg-brand-primary text-bg-base font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+                  className="w-full py-5 bg-brand-primary text-bg-base font-bold uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all"
                 >
                   Lock In Your Project
                 </button>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews Section */}
+      <section id="reviews" className="py-24 px-6 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <motion.div {...FADE_UP} className="mb-16 text-center lg:text-left">
+            <span className="text-brand-primary text-xs font-bold uppercase tracking-widest mb-4 block">Proven Performance</span>
+            <h2 className="font-display text-4xl md:text-6xl font-bold mb-6 italic italic">The Agency Result.</h2>
+            <p className="text-ink-muted text-lg max-w-2xl font-light">We don't just build sites; we build success stories. Here's what our clients say after going live.</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                client: "Aura Nails",
+                quote: "The speed is insane. We saw a 40% increase in online bookings in the first week. The mobile version is flawless.",
+                image: "https://images.unsplash.com/photo-1604076913837-52ab5629fba9?auto=format&fit=crop&q=80&w=600",
+                business: "Beauty & Wellness"
+              },
+              {
+                client: "Prime Gym",
+                quote: "Best $299 I ever spent. The mobile performance is better than my previous $3k site. Highly recommended.",
+                image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600",
+                business: "Fitness Center"
+              },
+              {
+                client: "Zen Coffee",
+                quote: "Professional, fast, and converts like crazy. Filip knows exactly what a local business needs to stand out.",
+                image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=600",
+                business: "Specialty Coffee"
+              }
+            ].map((review, i) => (
+              <motion.div 
+                key={review.client}
+                custom={i}
+                {...STAGGER}
+                className="glass brutalist-border flex flex-col group overflow-hidden"
+              >
+                <div className="aspect-video relative overflow-hidden">
+                  <img 
+                    src={review.image} 
+                    alt={review.client}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-bg-base/40 group-hover:bg-bg-base/20 transition-colors" />
+                  <div className="absolute top-4 left-4 glass px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest text-brand-primary">
+                    {review.business}
+                  </div>
+                </div>
+                <div className="p-8 flex-1 flex flex-col">
+                  <p className="text-ink-muted italic mb-6 flex-1">"{review.quote}"</p>
+                  <div className="pt-6 border-t border-white/5">
+                    <span className="font-display font-bold text-white block">{review.client}</span>
+                    <span className="text-[10px] text-brand-primary uppercase tracking-widest font-black">Satisfied Client</span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -1043,23 +1106,23 @@ export default function App() {
             <p className="text-ink-muted font-light leading-relaxed">Have a question about a specific integration or a custom bulk deal? Reach out to the source.</p>
           </motion.div>
           
-          <div className="flex flex-col sm:flex-row gap-6 w-full md:w-auto">
-            <a href="mailto:consultprompts@gmail.com" className="flex items-center gap-4 p-8 glass brutalist-border group flex-1">
-              <div className="p-3 rounded bg-brand-primary/10 text-brand-primary group-hover:bg-brand-primary group-hover:text-bg-base transition-colors">
+          <div className="flex flex-col sm:flex-row lg:flex-nowrap flex-wrap gap-6 w-full md:w-auto">
+            <a href="mailto:consultprompts@gmail.com" className="flex items-center gap-4 p-6 sm:p-8 glass brutalist-border group flex-1 min-w-0">
+              <div className="p-3 rounded bg-brand-primary/10 text-brand-primary group-hover:bg-brand-primary group-hover:text-bg-base transition-colors shrink-0">
                 <MailIcon className="w-6 h-6" />
               </div>
-              <div>
+              <div className="min-w-0 overflow-hidden">
                 <span className="text-[10px] uppercase tracking-widest font-bold text-ink-muted block mb-1">Email Strategy</span>
-                <span className="text-lg font-display font-bold">consultprompts@gmail.com</span>
+                <span className="text-base sm:text-lg font-display font-bold break-all block">consultprompts@gmail.com</span>
               </div>
             </a>
-            <a href="https://instagram.com/consultprompts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-8 glass brutalist-border group flex-1">
-              <div className="p-3 rounded bg-brand-secondary/10 text-brand-secondary group-hover:bg-brand-secondary group-hover:text-bg-base transition-colors">
+            <a href="https://instagram.com/consultprompts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-6 sm:p-8 glass brutalist-border group flex-1 min-w-0">
+              <div className="p-3 rounded bg-brand-secondary/10 text-brand-secondary group-hover:bg-brand-secondary group-hover:text-bg-base transition-colors shrink-0">
                 <Instagram className="w-6 h-6" />
               </div>
-              <div>
+              <div className="min-w-0 overflow-hidden">
                 <span className="text-[10px] uppercase tracking-widest font-bold text-ink-muted block mb-1">Visual Log</span>
-                <span className="text-lg font-display font-bold">@consultprompts</span>
+                <span className="text-base sm:text-lg font-display font-bold truncate block">@consultprompts</span>
               </div>
             </a>
           </div>
@@ -1088,8 +1151,8 @@ export default function App() {
 
       {/* Footer */}
       <footer className="py-12 px-6 border-t border-white/5">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
-          <div className="flex flex-col gap-2 items-center md:items-start">
+        <div className="max-w-7xl mx-auto flex flex-col xl:flex-row justify-between items-center gap-8 text-center xl:text-left">
+          <div className="flex flex-col gap-2 items-center xl:items-start">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 flex items-center justify-center overflow-hidden">
                 <img 
