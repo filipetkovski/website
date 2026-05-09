@@ -229,10 +229,10 @@ export default function App() {
 
   const reviews = [
     {
-      client: "Aura Nails",
-      quote: "The speed is insane. We saw a 40% increase in online bookings in the first week. The mobile version is flawless.",
-      image: "https://images.unsplash.com/photo-1604076913837-52ab5629fba9?auto=format&fit=crop&q=80&w=600",
-      business: "Beauty & Wellness"
+      client: "Boardwalk Fries",
+      quote: "The speed is insane. We saw a 40% increase in sales in the first week. The mobile version is flawless.",
+      image: "boardwalk.png",
+      business: "FAST FOOD RESTAURANT"
     },
     {
       client: "Prime Gym",
@@ -276,7 +276,7 @@ export default function App() {
     },
     {
       id: "03",
-      title: "Get more Bookings",
+      title: "Get more Sales",
       description: "Stop losing customers to slow loading times or bad UX. Convert visitors into loyal clients immediately.",
       icon: <CheckCircle className="w-6 h-6 text-brand-primary" />
     }
