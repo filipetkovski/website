@@ -994,7 +994,7 @@ export default function App() {
                 {...STAGGER}
                 className="group p-8 brutalist-border bg-bg-surface relative overflow-hidden flex-shrink-0 w-[calc(100vw-3rem)] md:w-[calc(50vw-3rem)] lg:w-auto snap-start"
               >
-                <div className="absolute top-0 right-0 font-display text-8xl font-black text-white/[0.03] -translate-y-4 translate-x-4 group-hover:text-brand-primary/5 transition-colors">
+                <div className="absolute top-0 right-0 font-display text-8xl font-black text-white/[0.03] -translate-y-4 translate-x-1 group-hover:text-brand-primary/5 transition-colors">
                   {step.id}
                 </div>
                 <div className="mb-6">{step.icon}</div>
