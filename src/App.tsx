@@ -235,10 +235,10 @@ export default function App() {
       business: "FAST FOOD RESTAURANT"
     },
     {
-      client: "Prime Gym",
+      client: "Inspire",
       quote: "Best $299 I ever spent. The mobile performance is better than my previous $3k site. Highly recommended.",
-      image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600",
-      business: "Fitness Center"
+      image: "inspire.png",
+      business: "BARBER SHOP"
     },
     {
       client: "Zen Coffee",
