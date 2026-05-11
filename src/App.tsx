@@ -30,7 +30,14 @@ import {
   MessageCircle,
   ChevronDown,
   Eye,
-  EyeOff
+  EyeOff,
+  MapPin,
+  Brain,
+  Calendar,
+  MessageSquare,
+  BarChart3,
+  Send,
+  CloudCog
 } from 'lucide-react';
 import { 
   submitLead, 
@@ -257,7 +264,7 @@ export default function App() {
 
   const stats = [
     { label: "Delivery Time", value: "72 Hours" },
-    { label: "Flat Fee", value: "$299" },
+    { label: "Visibility", value: "SEO" },
     { label: "Experience", value: "5+ Years" },
   ];
 
@@ -280,15 +287,6 @@ export default function App() {
       description: "Stop losing customers to slow loading times or bad UX. Convert visitors into loyal clients immediately.",
       icon: <CheckCircle className="w-6 h-6 text-brand-primary" />
     }
-  ];
-
-  const services = [
-    { title: "Custom Domain", icon: <Globe className="w-5 h-5" /> },
-    { title: "Hosting Setup", icon: <ShieldCheck className="w-5 h-5" /> },
-    { title: "Mobile-Responsive", icon: <Smartphone className="w-5 h-5" /> },
-    { title: "SEO Ready", icon: <Search className="w-5 h-5" /> },
-    { title: "Ultra-Fast Performance", icon: <Zap className="w-5 h-5" /> },
-    { title: "3-5 Page Buildout", icon: <CheckCircle className="w-5 h-5" /> },
   ];
 
   const faqs = [
@@ -370,7 +368,7 @@ export default function App() {
               {!submitted ? (
                 <>
                   <div className="mb-8">
-                    <h3 className="font-display text-3xl font-bold italic mb-2">Claim Your Mockup</h3>
+                    <h3 className="font-display text-3xl font-bold italic mb-2">Claim Your Spot</h3>
                     <p className="text-ink-muted text-sm font-light">Tell us about your business. We'll build the vision for free.</p>
                   </div>
 
@@ -386,6 +384,7 @@ export default function App() {
                           email: formData.get('email') as string,
                           business: formData.get('business') as string,
                           message: formData.get('message') as string,
+                          package: formData.get('package') as string,
                           userId: user?.uid || '',
                         });
                         setSubmitted(true);
@@ -400,13 +399,21 @@ export default function App() {
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Company Name</label>
                       <input required defaultValue={user?.displayName || ''} name="name" type="text" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors" placeholder="Agency Name / Business LLC" />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-2 hidden">
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Work Email</label>
                       <input required defaultValue={user?.email || ''} name="email" type="email" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors" placeholder="filip@example.com" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Business Type</label>
                       <input required name="business" type="text" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors" placeholder="Nail Salon / Local Service" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Package Selection</label>
+                      <select required name="package" defaultValue="visibility" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors appearance-none cursor-pointer">
+                        <option value="facelift" className="bg-bg-surface">Digital Face-Lift ($299)</option>
+                        <option value="visibility" className="bg-bg-surface">Visibility Booster ($499)</option>
+                        <option value="growth" className="bg-bg-surface">Auto-Pilot Growth ($699)</option>
+                      </select>
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Message (Optional)</label>
@@ -611,7 +618,14 @@ export default function App() {
                                 {lead.status || 'pending'}
                               </span>
                             </div>
-                            <p className="text-brand-primary text-sm font-medium">{lead.business}</p>
+                            <div className="flex items-center gap-2 mb-1">
+                              <p className="text-brand-primary text-sm font-medium">{lead.business}</p>
+                              {lead.package && (
+                                <span className="text-[8px] uppercase tracking-widest font-black bg-white/10 px-1.5 py-0.5 rounded text-white italic">
+                                  {lead.package}
+                                </span>
+                              )}
+                            </div>
                           </div>
                           <div className="text-right">
                             <p className="text-white text-sm">{lead.email}</p>
@@ -749,7 +763,7 @@ export default function App() {
                 onClick={handleOpenMockup}
                 className="text-sm font-bold uppercase tracking-widest bg-brand-primary text-bg-base px-5 py-2.5 rounded-sm hover:opacity-90 transition-opacity"
               >
-                Get Mockup
+                START YOUR PROJECT
               </button>
               {!user ? (
                 <button 
@@ -851,7 +865,7 @@ export default function App() {
                 onClick={() => { handleOpenMockup(); setIsMobileMenuOpen(false); }}
                 className="w-full py-5 bg-brand-primary text-bg-base font-black uppercase tracking-widest"
               >
-                Get Mockup Design
+                START YOUR PROJECT
               </button>
             </div>
           </motion.div>
@@ -877,12 +891,9 @@ export default function App() {
                 onClick={handleOpenMockup}
                 className="group relative px-8 py-4 bg-brand-primary text-bg-base font-bold text-lg uppercase tracking-wider rounded-sm overflow-hidden transition-all hover:pr-12 md:w-auto w-full"
               >
-                Get My Free Mockup
+                START YOUR PROJECT
                 <ArrowRight className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all w-5 h-5" />
               </button>
-              <div className="flex items-center justify-center gap-4 px-6 border border-white/10 rounded-sm italic text-ink-muted text-sm tracking-wide md:w-auto w-full py-4 sm:py-0 min-h-[56px]">
-                Flat $299 Fee. <br className="sm:hidden" /> No Hidden BS.
-              </div>
             </div>
           </motion.div>
 
@@ -952,7 +963,7 @@ export default function App() {
               </div>
 
               <div className="absolute -top-4 -right-4 md:-top-6 md:-right-6 glass px-4 py-3 rounded text-brand-primary font-display font-bold text-lg neon-glow z-20">
-                $299 FLAT
+                AGENCY QUALITY
               </div>
             </div>
           </motion.div>
@@ -1009,64 +1020,152 @@ export default function App() {
       {/* Services & Pricing */}
       <section id="pricing" aria-label="Pricing and Web Design Services" className="py-16 md:py-24 px-6 bg-white/[0.02]">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
-            <motion.div {...FADE_UP}>
-              <span className="text-brand-primary text-xs font-bold uppercase tracking-widest mb-4 block">Affordable All-Inclusive Package</span>
-              <h2 className="font-display text-3xl md:text-6xl font-bold mb-8 italic leading-tight">Everything you need. <br/> Nothing you don't.</h2>
-              <p className="text-ink-muted mb-12 max-w-md font-light leading-relaxed">
-                We've packaged the "Modern Standard" of web features into one <span className="font-medium text-white">$299 flat price</span>. No tiers, no hidden monthly upsells for basic plugins.
-              </p>
-              <div className="grid sm:grid-cols-2 gap-y-6 gap-x-8">
-                {services.map((service, i) => (
-                  <motion.div 
-                    key={service.title} 
-                    custom={i} 
-                    {...STAGGER}
-                    className="flex items-center gap-3"
-                  >
-                    <div className="text-brand-primary flex-shrink-0">{service.icon}</div>
-                    <span className="text-sm font-medium tracking-wide">{service.title}</span>
-                  </motion.div>
-                ))}
+          <motion.div {...FADE_UP} className="mb-16 text-center lg:text-left">
+            <span className="text-brand-primary text-xs font-bold uppercase tracking-widest mb-4 block">Scalable Growth Tiers</span>
+            <h2 className="font-display text-4xl md:text-6xl font-bold mb-8 italic leading-tight">Pick Your Fuel.</h2>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Package 1: Digital Face-Lift */}
+            <motion.div 
+              custom={0} {...STAGGER}
+              className="glass p-8 rounded-sm border-white/5 flex flex-col hover:border-brand-primary/30 hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group"
+            >
+              <div className="mb-8">
+                <h3 className="font-display text-2xl font-bold italic mb-2">Digital Face-Lift</h3>
+                <p className="text-ink-muted text-sm font-light">The ultimate hook. High-speed, modern replacement for old sites.</p>
               </div>
+              <div className="mb-8">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-display font-black leading-none">$299</span>
+                  <span className="text-xs text-ink-muted font-bold tracking-widest uppercase">/ Startup</span>
+                </div>
+              </div>
+              <ul className="space-y-4 mb-10 flex-1 border-t border-white/5 pt-8">
+                <li className="flex gap-3 text-sm">
+                  <Smartphone className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>3-5 Modern Pages (Mobile-First)</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <Zap className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>Speed Optimization (&lt; 2s Load)</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <CloudCog className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>Domain & Hosting Transfer</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <Search className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>Basic Global SEO</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <MessageCircle className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>Lead Capture Form</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <Rocket className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>48–72 Hour Turnaround</span>
+                </li>
+              </ul>
+              <button 
+                onClick={handleOpenMockup}
+                className="w-full py-4 bg-white/5 text-white font-bold uppercase tracking-widest hover:bg-brand-primary hover:text-bg-base transition-all"
+              >
+                Select Package
+              </button>
             </motion.div>
 
+            {/* Package 2: Visibility Booster */}
             <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative"
+              custom={1} {...STAGGER}
+              className="glass p-8 rounded-sm border-brand-primary/30 relative flex flex-col neon-glow-subtle bg-linear-to-br from-bg-surface to-bg-base overflow-hidden hover:scale-[1.02] hover:shadow-2xl transition-all duration-300"
             >
-              <div className="glass p-8 md:p-12 rounded-sm border-brand-primary/30 relative z-10 neon-glow bg-linear-to-br from-bg-surface to-bg-base group overflow-hidden">
-                <div className="absolute -bottom-10 -right-10 text-brand-primary opacity-5 transform group-hover:scale-110 transition-transform duration-700">
-                  <Zap className="w-64 h-64 fill-current rotate-12" />
-                </div>
-                <h3 className="font-display text-xs font-bold uppercase tracking-widest text-brand-primary mb-2">The Launch Package</h3>
-                <div className="flex items-baseline gap-2 mb-8">
-                  <span className="text-5xl md:text-8xl font-display font-black leading-none">$299</span>
-                  <span className="text-xs md:text-sm text-ink-muted font-bold tracking-widest uppercase">/ Flat Fee</span>
-                </div>
-                <ul className="space-y-4 mb-10 border-t border-white/10 pt-8">
-                  <li className="flex items-center gap-3 text-sm">
-                    <CheckCircle className="w-4 h-4 text-brand-primary" />
-                    <span>72-Hour Rapid Delivery</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-sm">
-                    <CheckCircle className="w-4 h-4 text-brand-primary" />
-                    <span>Free Maintenance (1 Month)</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-sm">
-                    <CheckCircle className="w-4 h-4 text-brand-primary" />
-                    <span>Founders Direct Line Access</span>
-                  </li>
-                </ul>
-                <button 
-                  onClick={handleOpenMockup}
-                  className="w-full py-5 bg-brand-primary text-bg-base font-bold uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all"
-                >
-                  Lock In Your Project
-                </button>
+              <div className="absolute top-0 right-0 bg-brand-primary text-bg-base text-[10px] font-black px-4 py-1 uppercase tracking-widest">Best Value</div>
+              <div className="mb-8">
+                <h3 className="font-display text-2xl font-bold italic mb-2">Visibility Booster</h3>
+                <p className="text-ink-muted text-sm font-light">The better deal. Not just a site, but a way to get found on Google.</p>
               </div>
+              <div className="mb-8">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-display font-black leading-none">$499</span>
+                  <span className="text-xs text-ink-muted font-bold tracking-widest uppercase">/ Performance</span>
+                </div>
+              </div>
+              <ul className="space-y-4 mb-10 flex-1 border-t border-white/10 pt-8">
+                <li className="font-bold text-xs uppercase tracking-widest text-brand-primary mb-2 italic">Everything in $299 Plus:</li>
+                <li className="flex gap-3 text-sm">
+                  <MapPin className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>Google Business Profile (GBP) Fix</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <Search className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>Local SEO (City/Neighborhood)</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <Instagram className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>Social Feed Auto-Sync</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <Brain className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>AI Persuasive Copywriting</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <Zap className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>1 Month "On-Call" Updates</span>
+                </li>
+              </ul>
+              <button 
+                onClick={handleOpenMockup}
+                className="w-full py-5 bg-brand-primary text-bg-base font-bold uppercase tracking-widest hover:brightness-110 shadow-lg shadow-brand-primary/20 transition-all"
+              >
+                Go Visibility
+              </button>
+            </motion.div>
+
+            {/* Package 3: Auto-Pilot Growth */}
+            <motion.div 
+              custom={2} {...STAGGER}
+              className="glass p-8 rounded-sm border-white/5 flex flex-col hover:border-brand-primary/30 hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group"
+            >
+              <div className="mb-8">
+                <h3 className="font-display text-2xl font-bold italic mb-2">Auto-Pilot Growth</h3>
+                <p className="text-ink-muted text-sm font-light">The premium. Saving the owner 5+ hours a week in admin work.</p>
+              </div>
+              <div className="mb-8">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-display font-black leading-none">$699</span>
+                  <span className="text-xs text-ink-muted font-bold tracking-widest uppercase">/ Enterprise</span>
+                </div>
+              </div>
+              <ul className="space-y-4 mb-10 flex-1 border-t border-white/5 pt-8">
+                <li className="font-bold text-xs uppercase tracking-widest text-brand-primary mb-2 italic">Everything in $499 Plus:</li>
+                <li className="flex gap-3 text-sm">
+                  <Calendar className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>Integrated Booking System</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <MessageSquare className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>24/7 AI Chatbot Assistant</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <BarChart3 className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>Premium Analytics Dashboard</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <Send className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>Email/SMS Automation</span>
+                </li>
+                <li className="flex gap-3 text-sm">
+                  <ShieldCheck className="w-4 h-4 text-brand-primary flex-shrink-0" />
+                  <span>3 Months Priority Support</span>
+                </li>
+              </ul>
+              <button 
+                onClick={handleOpenMockup}
+                className="w-full py-4 bg-white/5 text-white font-bold uppercase tracking-widest hover:bg-brand-primary hover:text-bg-base transition-all"
+              >
+                Go Premium
+              </button>
             </motion.div>
           </div>
         </div>
@@ -1211,7 +1310,7 @@ export default function App() {
               onClick={handleOpenMockup}
               className="px-8 md:px-12 py-5 md:py-6 bg-bg-base text-white font-black text-xl md:text-2xl uppercase tracking-widest hover:scale-105 transition-transform"
             >
-              Claim Your $299 Spot
+              Claim Your Spot
             </button>
             <p className="mt-8 text-bg-base/70 font-bold text-sm tracking-widest uppercase">
 
