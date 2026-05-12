@@ -61,6 +61,29 @@ const FADE_UP = {
   transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
 };
 
+const CONTAINER_STAGGER = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const ITEM_STAGGER = {
+  hidden: { opacity: 0, y: 30 },
+  show: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1]
+    }
+  }
+};
+
 const STAGGER = {
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
@@ -143,6 +166,8 @@ export default function App() {
     };
   }, [isMobileMenuOpen, isModalOpen, isAuthModalOpen, isAdminPanelOpen]);
 
+  const [selectedPackage, setSelectedPackage] = useState<string>('visibility');
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
@@ -175,7 +200,13 @@ export default function App() {
     }
   }, [user, isAdminPanelOpen]);
 
-  const handleOpenMockup = () => {
+  const handleOpenMockup = (packageId?: string) => {
+    if (packageId) {
+      setSelectedPackage(packageId);
+    } else {
+      setSelectedPackage('visibility');
+    }
+
     if (!user) {
       setPendingAction('OPEN_MOCKUP');
       setAuthMode('signup');
@@ -409,7 +440,13 @@ export default function App() {
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Package Selection</label>
-                      <select required name="package" defaultValue="visibility" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors appearance-none cursor-pointer">
+                      <select 
+                        required 
+                        name="package" 
+                        value={selectedPackage} 
+                        onChange={(e) => setSelectedPackage(e.target.value)}
+                        className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors appearance-none cursor-pointer"
+                      >
                         <option value="facelift" className="bg-bg-surface">Digital Face-Lift ($299)</option>
                         <option value="visibility" className="bg-bg-surface">Visibility Booster ($499)</option>
                         <option value="growth" className="bg-bg-surface">Auto-Pilot Growth ($699)</option>
@@ -971,14 +1008,20 @@ export default function App() {
 
         {/* Stats Strip */}
         <div className="max-w-7xl mx-auto mt-16 md:mt-24 border-y border-white/5 py-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {stats.map((stat, i) => (
-              <motion.div key={stat.label} custom={i} {...STAGGER} className="flex flex-col items-center md:items-start">
+          <motion.div 
+            variants={CONTAINER_STAGGER}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
+          >
+            {stats.map((stat) => (
+              <motion.div key={stat.label} variants={ITEM_STAGGER} className="flex flex-col items-center md:items-start">
                 <span className="text-3xl md:text-5xl font-display font-bold text-white mb-2">{stat.value}</span>
                 <span className="text-xs uppercase tracking-[0.2em] font-bold text-ink-muted">{stat.label}</span>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </header>
 
@@ -997,12 +1040,17 @@ export default function App() {
             <div className="h-[1.5px] w-12 bg-brand-primary" />
           </div>
 
-          <div className="flex md:flex-row overflow-x-auto lg:grid lg:grid-cols-3 gap-8 md:gap-12 pb-8 lg:pb-0 snap-x snap-mandatory brutalist-scrollbar scroll-smooth">
-            {processSteps.map((step, i) => (
+          <motion.div 
+            variants={CONTAINER_STAGGER}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="flex md:flex-row overflow-x-auto lg:grid lg:grid-cols-3 gap-8 md:gap-12 pb-8 lg:pb-0 snap-x snap-mandatory brutalist-scrollbar scroll-smooth"
+          >
+            {processSteps.map((step) => (
               <motion.div 
                 key={step.id} 
-                custom={i} 
-                {...STAGGER}
+                variants={ITEM_STAGGER}
                 className="group p-8 brutalist-border bg-bg-surface relative overflow-hidden flex-shrink-0 w-[calc(100vw-3rem)] md:w-[calc(50vw-3rem)] lg:w-auto snap-start"
               >
                 <div className="absolute top-0 right-0 font-display text-8xl font-black text-white/[0.03] -translate-y-4 translate-x-1 group-hover:text-brand-primary/5 transition-colors">
@@ -1013,7 +1061,7 @@ export default function App() {
                 <p className="text-ink-muted leading-relaxed text-sm font-light">{step.description}</p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -1025,12 +1073,20 @@ export default function App() {
             <h2 className="font-display text-4xl md:text-6xl font-bold mb-8 italic leading-tight">Pick Your Fuel.</h2>
           </motion.div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <motion.div 
+            variants={CONTAINER_STAGGER}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-100px" }}
+            className="grid lg:grid-cols-3 gap-8"
+          >
             {/* Package 1: Digital Face-Lift */}
             <motion.div 
-              custom={0} {...STAGGER}
-              className="glass p-8 rounded-sm border-white/5 flex flex-col hover:border-brand-primary/30 hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group"
+              variants={ITEM_STAGGER}
+              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+              className="glass p-8 rounded-sm border-white/5 flex flex-col relative group"
             >
+              <div className="absolute inset-0 border border-transparent group-hover:border-brand-primary/30 transition-colors duration-300 rounded-sm pointer-events-none" />
               <div className="mb-8">
                 <h3 className="font-display text-2xl font-bold italic mb-2">Digital Face-Lift</h3>
                 <p className="text-ink-muted text-sm font-light">The ultimate hook. High-speed, modern replacement for old sites.</p>
@@ -1048,7 +1104,7 @@ export default function App() {
                 </li>
                 <li className="flex gap-3 text-sm">
                   <Zap className="w-4 h-4 text-brand-primary flex-shrink-0" />
-                  <span>Speed Optimization (&lt; 2s Load)</span>
+                  <span>Speed Optimization</span>
                 </li>
                 <li className="flex gap-3 text-sm">
                   <CloudCog className="w-4 h-4 text-brand-primary flex-shrink-0" />
@@ -1068,7 +1124,7 @@ export default function App() {
                 </li>
               </ul>
               <button 
-                onClick={handleOpenMockup}
+                onClick={() => handleOpenMockup('facelift')}
                 className="w-full py-4 bg-white/5 text-white font-bold uppercase tracking-widest hover:bg-brand-primary hover:text-bg-base transition-all"
               >
                 Select Package
@@ -1077,8 +1133,9 @@ export default function App() {
 
             {/* Package 2: Visibility Booster */}
             <motion.div 
-              custom={1} {...STAGGER}
-              className="glass p-8 rounded-sm border-brand-primary/30 relative flex flex-col neon-glow-subtle bg-linear-to-br from-bg-surface to-bg-base overflow-hidden hover:scale-[1.02] hover:shadow-2xl transition-all duration-300"
+              variants={ITEM_STAGGER}
+              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+              className="glass p-8 rounded-sm border-brand-primary/30 relative flex flex-col neon-glow-subtle bg-linear-to-br from-bg-surface to-bg-base overflow-hidden"
             >
               <div className="absolute top-0 right-0 bg-brand-primary text-bg-base text-[10px] font-black px-4 py-1 uppercase tracking-widest">Best Value</div>
               <div className="mb-8">
@@ -1115,7 +1172,7 @@ export default function App() {
                 </li>
               </ul>
               <button 
-                onClick={handleOpenMockup}
+                onClick={() => handleOpenMockup('visibility')}
                 className="w-full py-5 bg-brand-primary text-bg-base font-bold uppercase tracking-widest hover:brightness-110 shadow-lg shadow-brand-primary/20 transition-all"
               >
                 Go Visibility
@@ -1124,9 +1181,11 @@ export default function App() {
 
             {/* Package 3: Auto-Pilot Growth */}
             <motion.div 
-              custom={2} {...STAGGER}
-              className="glass p-8 rounded-sm border-white/5 flex flex-col hover:border-brand-primary/30 hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group"
+              variants={ITEM_STAGGER}
+              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+              className="glass p-8 rounded-sm border-white/5 flex flex-col relative group"
             >
+              <div className="absolute inset-0 border border-transparent group-hover:border-brand-primary/30 transition-colors duration-300 rounded-sm pointer-events-none" />
               <div className="mb-8">
                 <h3 className="font-display text-2xl font-bold italic mb-2">Auto-Pilot Growth</h3>
                 <p className="text-ink-muted text-sm font-light">The premium. Saving the owner 5+ hours a week in admin work.</p>
@@ -1161,13 +1220,13 @@ export default function App() {
                 </li>
               </ul>
               <button 
-                onClick={handleOpenMockup}
+                onClick={() => handleOpenMockup('growth')}
                 className="w-full py-4 bg-white/5 text-white font-bold uppercase tracking-widest hover:bg-brand-primary hover:text-bg-base transition-all"
               >
                 Go Premium
               </button>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
