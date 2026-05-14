@@ -37,7 +37,8 @@ import {
   MessageSquare,
   BarChart3,
   Send,
-  CloudCog
+  CloudCog,
+  Star,
 } from 'lucide-react';
 import { 
   submitLead, 
@@ -388,20 +389,20 @@ export default function App() {
                 setIsModalOpen(false);
                 setSubmitted(false);
               }}
-              className="absolute inset-0 bg-bg-base/90 backdrop-blur-sm"
+              className="absolute inset-0 bg-bg-base/90 backdrop-blur-sm cursor-pointer"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-lg glass p-8 md:p-12 rounded-sm border-brand-primary/30 z-10"
+              className="relative w-full max-w-lg liquid-glass p-8 md:p-12 rounded-xl brutalist-border z-10"
             >
               <button 
                 onClick={() => {
                   setIsModalOpen(false);
                   setSubmitted(false);
                 }}
-                className="absolute top-6 right-6 text-ink-muted hover:text-white transition-colors"
+                className="absolute top-6 right-6 text-ink-muted hover:text-white transition-colors cursor-pointer"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -438,15 +439,15 @@ export default function App() {
                   >
                     <div className="space-y-2">
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Company Name</label>
-                      <input required defaultValue={user?.displayName || ''} name="name" type="text" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors" placeholder="Agency Name / Business LLC" />
+                      <input required defaultValue={user?.displayName || ''} name="name" type="text" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors rounded-xl" placeholder="Agency Name / Business LLC" />
                     </div>
                     <div className="space-y-2 hidden">
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Work Email</label>
-                      <input required defaultValue={user?.email || ''} name="email" type="email" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors" placeholder="filip@example.com" />
+                      <input required defaultValue={user?.email || ''} name="email" type="email" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors rounded-xl" placeholder="filip@example.com" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Business Type</label>
-                      <input required name="business" type="text" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors" placeholder="Nail Salon / Local Service" />
+                      <input required name="business" type="text" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors rounded-xl" placeholder="Nail Salon / Local Service" />
                     </div>
                     <div className="space-y-4">
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Select Your Package</label>
@@ -456,7 +457,7 @@ export default function App() {
                           name="package" 
                           value={selectedPackage} 
                           onChange={(e) => setSelectedPackage(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors appearance-none cursor-pointer pr-12"
+                          className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors appearance-none cursor-pointer pr-12 rounded-xl"
                         >
                           <option value="facelift" className="bg-bg-surface">Digital Face-Lift ($299)</option>
                           <option value="visibility" className="bg-bg-surface">Visibility Booster ($499)</option>
@@ -469,13 +470,13 @@ export default function App() {
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Message (Optional)</label>
-                      <textarea name="message" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors h-24 resize-none" placeholder="Give us a head start..."></textarea>
+                      <textarea name="message" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors h-24 resize-none rounded-xl" placeholder="Give us a head start..."></textarea>
                     </div>
                     <button 
                       disabled={isSubmitting}
-                      className="w-full py-5 bg-brand-primary text-bg-base font-black uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                      className="liquid-glass w-full py-4 text-white font-black uppercase tracking-widest hover:border-brand-primary transition-all flex items-center justify-center gap-2 rounded-xl border-white/10 relative group cursor-pointer disabled:cursor-not-allowed"
                     >
-                      {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Submit"} 
+                      <span className="relative z-10">{isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Submit"}</span>
                     </button>
                   </form>
                 </>
@@ -492,7 +493,7 @@ export default function App() {
                       href="https://wa.me/13026622736" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="w-full py-4 bg-green-500 text-bg-base font-black uppercase tracking-widest hover:bg-green-400 transition-colors flex items-center justify-center gap-2 rounded-lg"
+                      className="w-full py-4 bg-green-500 text-bg-base font-black uppercase tracking-widest hover:bg-green-400 transition-colors flex items-center justify-center gap-2 rounded-lg cursor-pointer"
                     >
                       <MessageCircle className="w-5 h-5" />
                       Chat on WhatsApp
@@ -503,7 +504,7 @@ export default function App() {
                         setIsModalOpen(false);
                         setSubmitted(false);
                       }}
-                      className="text-xs font-bold uppercase tracking-widest border-b border-brand-primary pb-1 hover:text-brand-primary hover:border-white transition-colors"
+                      className="text-xs font-bold uppercase tracking-widest border-b border-brand-primary pb-1 hover:text-brand-primary hover:border-white transition-colors cursor-pointer"
                     >
                       Back Home
                     </button>
@@ -524,13 +525,13 @@ export default function App() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsAuthModalOpen(false)}
-              className="absolute inset-0 bg-bg-base/95 backdrop-blur-md"
+              className="absolute inset-0 bg-bg-base/95 backdrop-blur-md cursor-pointer"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-sm glass p-6 md:p-10 rounded-sm border-brand-primary/30 z-10"
+              className="relative w-full max-w-sm liquid-glass p-6 md:p-10 rounded-xl border-brand-primary/30 z-10"
             >
               <div className="text-center mb-6 md:mb-8">
                 <div className="w-12 h-12 md:w-16 md:h-16 bg-brand-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
@@ -548,21 +549,21 @@ export default function App() {
                 {authMode === 'signup' && (
                   <div className="space-y-1">
                     <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary">Full Name</label>
-                    <input required name="name" type="text" className="w-full bg-white/5 border border-white/10 p-2.5 md:p-3 font-light focus:border-brand-primary outline-none transition-colors text-sm" placeholder="John Doe" />
+                    <input required name="name" type="text" className="w-full bg-white/5 border border-white/10 p-2.5 md:p-3 font-light focus:border-brand-primary outline-none transition-colors text-sm rounded-xl" placeholder="John Doe" />
                   </div>
                 )}
                 <div className="space-y-1">
                   <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary">Email</label>
-                  <input required name="email" type="email" className="w-full bg-white/5 border border-white/10 p-2.5 md:p-3 font-light focus:border-brand-primary outline-none transition-colors text-sm" placeholder="john@example.com" />
+                  <input required name="email" type="email" className="w-full bg-white/5 border border-white/10 p-2.5 md:p-3 font-light focus:border-brand-primary outline-none transition-colors text-sm rounded-xl" placeholder="john@example.com" />
                 </div>
                 <div className="space-y-1 relative">
                   <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary">Password</label>
                   <div className="relative">
-                    <input required name="password" type={showPassword ? 'text' : 'password'} className="w-full bg-white/5 border border-white/10 p-2.5 md:p-3 font-light focus:border-brand-primary outline-none transition-colors text-sm pr-10" placeholder="••••••••" />
+                    <input required name="password" type={showPassword ? 'text' : 'password'} className="w-full bg-white/5 border border-white/10 p-2.5 md:p-3 font-light focus:border-brand-primary outline-none transition-colors text-sm pr-10 rounded-xl" placeholder="••••••••" />
                     <button 
                       type="button" 
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-white"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-white cursor-pointer"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -570,9 +571,9 @@ export default function App() {
                 </div>
                 <button 
                   disabled={isSubmitting}
-                  className="w-full py-3.5 md:py-4 bg-brand-primary text-bg-base font-black uppercase tracking-widest hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="liquid-glass w-full py-3.5 md:py-4 text-white font-black uppercase tracking-widest hover:border-brand-primary/50 disabled:opacity-50 flex items-center justify-center gap-2 rounded-xl border-white/10 relative group cursor-pointer disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (authMode === 'login' ? 'Access' : 'Register')}
+                  <span className="relative z-10">{isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (authMode === 'login' ? 'Access' : 'Register')}</span>
                 </button>
               </form>
 
@@ -583,7 +584,7 @@ export default function App() {
 
               <button 
                 onClick={handleGoogleSignIn}
-                className="w-full py-3.5 md:py-4 bg-white/5 border border-white/10 text-white font-bold uppercase tracking-widest hover:bg-white/10 transition-colors flex items-center justify-center gap-3 text-sm"
+                className="liquid-glass w-full py-3.5 md:py-4 text-white font-bold uppercase tracking-widest hover:border-white/30 transition-all flex items-center justify-center gap-3 text-sm rounded-xl border-white/10 cursor-pointer"
               >
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5" alt="" />
                 Google
@@ -592,7 +593,7 @@ export default function App() {
               <div className="mt-6 md:mt-8 text-center">
                 <button 
                   onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
-                  className="text-xs text-ink-muted hover:text-brand-primary font-bold uppercase tracking-widest border-b border-white/10 pb-1"
+                  className="text-xs text-ink-muted hover:text-brand-primary font-bold uppercase tracking-widest border-b border-white/10 pb-1 cursor-pointer"
                 >
                   {authMode === 'login' ? "New here? Sign Up" : "Registered? Login"}
                 </button>
@@ -632,7 +633,7 @@ export default function App() {
                     <button
                       key={f}
                       onClick={() => setAdminFilter(f)}
-                      className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-all ${
+                      className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer ${
                         adminFilter === f 
                           ? 'bg-brand-primary text-bg-base' 
                           : 'text-ink-muted hover:text-white'
@@ -645,7 +646,7 @@ export default function App() {
 
                 <button 
                   onClick={() => setIsAdminPanelOpen(false)}
-                  className="absolute top-6 right-6 md:static z-[60] p-2 bg-bg-surface md:bg-transparent border border-white/10 md:border-none rounded-full hover:text-brand-primary transition-colors flex-shrink-0"
+                  className="absolute top-6 right-6 md:static z-[60] p-2 bg-bg-surface md:bg-transparent border border-white/10 md:border-none rounded-full hover:text-brand-primary transition-colors flex-shrink-0 cursor-pointer"
                 >
                   <X className="w-8 h-8" />
                 </button>
@@ -694,7 +695,7 @@ export default function App() {
                         <div className="flex justify-end pt-4 border-t border-white/5">
                           <button 
                             onClick={() => toggleLeadStatus(lead.id, lead.status || 'pending')}
-                            className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-white/5 hover:bg-brand-primary hover:text-bg-base transition-all rounded-sm"
+                            className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-white/5 hover:bg-brand-primary hover:text-bg-base transition-all rounded-sm cursor-pointer"
                           >
                             Mark as {lead.status === 'completed' ? 'Pending' : 'Completed'}
                           </button>
@@ -724,14 +725,14 @@ export default function App() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsProfileOpen(false)}
-              className="fixed inset-0 z-[155] bg-transparent"
+              className="fixed inset-0 z-[155] bg-transparent cursor-pointer"
             />
             <div className="fixed inset-0 z-[160] flex items-end justify-center p-6 md:items-start md:justify-end md:p-24 overflow-hidden pointer-events-none">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                className="w-full max-w-sm glass border-brand-primary/20 pointer-events-auto shadow-2xl p-8"
+                className="w-full max-w-sm liquid-glass border-brand-primary/20 pointer-events-auto shadow-2xl p-8 rounded-xl"
               >
                 <div className="flex items-center gap-4 mb-8">
                   <div className="w-12 h-12 rounded-full bg-brand-primary flex items-center justify-center text-bg-base font-black text-xl">
@@ -746,14 +747,14 @@ export default function App() {
                   {user.role === 'admin' && (
                     <button 
                       onClick={() => { setIsAdminPanelOpen(true); setIsProfileOpen(false); }}
-                      className="w-full flex items-center gap-3 p-4 bg-white/5 hover:bg-brand-primary hover:text-bg-base transition-all font-bold text-xs uppercase tracking-widest"
+                      className="w-full flex items-center gap-3 p-4 bg-white/5 hover:bg-brand-primary hover:text-bg-base transition-all font-bold text-xs uppercase tracking-widest cursor-pointer"
                     >
                       <LayoutDashboard className="w-4 h-4" /> Admin Console
                     </button>
                   )}
                   <button 
                     onClick={() => { auth.signOut(); setIsProfileOpen(false); }}
-                    className="w-full flex items-center gap-3 p-4 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-all font-bold text-xs uppercase tracking-widest"
+                    className="w-full flex items-center gap-3 p-4 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-all font-bold text-xs uppercase tracking-widest cursor-pointer"
                   >
                     <LogOut className="w-4 h-4" /> Log Out Signal
                   </button>
@@ -786,15 +787,15 @@ export default function App() {
           </div>
           
           <div className="hidden xl:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-ink-muted opacity-100">
-            <a href="#process" className="hover:text-brand-primary transition-colors">Process</a>
-            <a href="#pricing" className="hover:text-brand-primary transition-colors">Pricing</a>
-            <a href="#reviews" className="hover:text-brand-primary transition-colors">RESULTS</a>
-            <a href="#faq" className="hover:text-brand-primary transition-colors">FAQ</a>
-            <a href="#contact" className="hover:text-brand-primary transition-colors">Contact</a>
+            <a href="#process" className="hover:text-brand-primary transition-colors cursor-pointer">Process</a>
+            <a href="#pricing" className="hover:text-brand-primary transition-colors cursor-pointer">Pricing</a>
+            <a href="#reviews" className="hover:text-brand-primary transition-colors cursor-pointer">RESULTS</a>
+            <a href="#faq" className="hover:text-brand-primary transition-colors cursor-pointer">FAQ</a>
+            <a href="#contact" className="hover:text-brand-primary transition-colors cursor-pointer">Contact</a>
             {user?.role === 'admin' && (
               <button 
                 onClick={() => setIsAdminPanelOpen(true)}
-                className="flex items-center gap-2 text-brand-primary hover:text-white transition-colors"
+                className="flex items-center gap-2 text-brand-primary hover:text-white transition-colors cursor-pointer"
               >
                 <LayoutDashboard className="w-4 h-4" />
                 Admin
@@ -805,21 +806,21 @@ export default function App() {
             <div className="hidden xl:flex items-center gap-4">
               <button 
                 onClick={handleOpenMockup}
-                className="text-sm font-bold uppercase tracking-widest bg-brand-primary text-bg-base px-5 py-2.5 rounded-sm hover:opacity-90 transition-opacity"
+                className="liquid-glass text-sm font-bold uppercase tracking-widest text-white px-5 py-2.5 rounded-xl hover:border-brand-primary/50 transition-all border-white/10 cursor-pointer"
               >
                 START YOUR PROJECT
               </button>
               {!user ? (
                 <button 
                   onClick={() => { setAuthMode('login'); setIsAuthModalOpen(true); }}
-                  className="text-xs font-bold uppercase tracking-widest px-4 py-2 hover:text-brand-primary transition-colors"
+                  className="text-xs font-bold uppercase tracking-widest px-4 py-2 hover:text-brand-primary transition-colors cursor-pointer"
                 >
                   Sign up
                 </button>
               ) : (
                 <button 
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="relative group p-1 rounded-full border-2 border-white/10 hover:border-brand-primary transition-all overflow-hidden"
+                  className="relative group p-1 rounded-full border-2 border-white/10 hover:border-brand-primary transition-all overflow-hidden cursor-pointer"
                 >
                   <div className="w-10 h-10 rounded-full bg-bg-surface flex items-center justify-center text-white font-bold group-hover:text-brand-primary">
                     <UserIcon className="w-5 h-5" />
@@ -832,7 +833,7 @@ export default function App() {
           {/* Hamburger */}
           <button 
             onClick={() => setIsMobileMenuOpen(true)}
-            className="xl:hidden p-2 text-white"
+            className="xl:hidden p-2 text-white cursor-pointer"
           >
             <Menu className="w-8 h-8" />
           </button>
@@ -867,19 +868,19 @@ export default function App() {
             </div>
                 <span className="font-display font-bold uppercase text-xl">Consult Prompts</span>
               </div>
-              <button onClick={() => setIsMobileMenuOpen(false)}>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="cursor-pointer">
                 <X className="w-8 h-8" />
               </button>
             </div>
 
             <div className="flex flex-col gap-8 text-2xl font-display font-bold italic">
-              <a href="#process" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Process</a>
-              <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Pricing</a>
-              <a href="#reviews" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Results</a>
-              <a href="#faq" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Faq</a>
-              <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary">Contact</a>
+              <a href="#process" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary cursor-pointer">Process</a>
+              <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary cursor-pointer">Pricing</a>
+              <a href="#reviews" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary cursor-pointer">Results</a>
+              <a href="#faq" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary cursor-pointer">Faq</a>
+              <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-primary cursor-pointer">Contact</a>
               {user?.role === 'admin' && (
-                <button onClick={() => { setIsAdminPanelOpen(true); setIsMobileMenuOpen(false); }} className="text-left text-brand-primary uppercase">ADMIN PANEL</button>
+                <button onClick={() => { setIsAdminPanelOpen(true); setIsMobileMenuOpen(false); }} className="text-left text-brand-primary uppercase cursor-pointer">ADMIN PANEL</button>
               )}
             </div>
 
@@ -888,7 +889,7 @@ export default function App() {
                 <>
                   <button 
                     onClick={() => { setAuthMode('signup'); setIsAuthModalOpen(true); setIsMobileMenuOpen(false); }}
-                    className="w-full py-4 border border-white/10 font-bold uppercase tracking-widest"
+                    className="liquid-glass w-full py-4 text-white font-bold uppercase tracking-widest rounded-xl border-white/10 cursor-pointer"
                   >
                     Sign up
                   </button>
@@ -898,7 +899,7 @@ export default function App() {
                   <p className="text-xs text-ink-muted text-center uppercase tracking-widest">{user.email}</p>
                   <button 
                     onClick={() => { auth.signOut(); setIsMobileMenuOpen(false); }}
-                    className="w-full py-4 border border-white/10 font-bold uppercase tracking-widest"
+                    className="liquid-glass w-full py-4 text-white font-bold uppercase tracking-widest rounded-xl border-white/10 cursor-pointer"
                   >
                     Logout
                   </button>
@@ -907,9 +908,9 @@ export default function App() {
               
               <button 
                 onClick={() => { handleOpenMockup(); setIsMobileMenuOpen(false); }}
-                className="w-full py-5 bg-brand-primary text-bg-base font-black uppercase tracking-widest"
+                className="liquid-glass w-full py-5 text-white font-black uppercase tracking-widest rounded-xl border-brand-primary/20 relative group cursor-pointer"
               >
-                START YOUR PROJECT
+                <span className="relative z-10">START YOUR PROJECT</span>
               </button>
             </div>
           </motion.div>
@@ -1005,9 +1006,9 @@ export default function App() {
               <div className="flex flex-col sm:flex-row items-center gap-6">
                 <button 
                   onClick={() => handleOpenMockup()}
-                  className="group relative px-10 py-5 bg-brand-primary text-bg-base font-bold text-lg uppercase tracking-widest rounded-sm overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto text-center"
+                  className="liquid-glass group relative px-10 py-5 text-white font-bold text-lg uppercase tracking-widest rounded-xl overflow-hidden transition-all hover:scale-[1.05] active:scale-[0.98] w-full sm:w-auto text-center border-brand-primary/40 hover:border-brand-primary/80 cursor-pointer"
                 >
-                  START YOUR PROJECT
+                  <span className="relative z-10">START YOUR PROJECT</span>
                 </button>
                 <div className="flex -space-x-3 items-center">
                    {[1, 2, 3, 4].map((i) => (
@@ -1038,7 +1039,7 @@ export default function App() {
                 {/* Decoration */}
                 <div className="absolute -inset-1 bg-linear-to-r from-brand-primary/50 to-transparent rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
                 
-                <div className="relative glass p-2 rounded-2xl border-white/10 shadow-3xl transform group-hover:-translate-y-2 transition-transform duration-500">
+                <div className="relative liquid-glass p-2 rounded-2xl border-white/10 shadow-3xl transform group-hover:-translate-y-2 transition-transform duration-500">
                   <div className="overflow-hidden rounded-xl bg-bg-base">
                     <AnimatePresence mode="wait">
                       <motion.div 
@@ -1084,7 +1085,7 @@ export default function App() {
                       <button 
                         key={i}
                         onClick={() => setActivePanel(i)}
-                        className={`w-1 transition-all duration-300 ${activePanel === i ? 'h-8 bg-brand-primary' : 'h-4 bg-white/20'}`}
+                        className={`w-1 transition-all duration-300 cursor-pointer ${activePanel === i ? 'h-8 bg-brand-primary' : 'h-4 bg-white/20'}`}
                       />
                     ))}
                   </div>
@@ -1094,7 +1095,7 @@ export default function App() {
                 <motion.div 
                    animate={{ y: [0, -10, 0] }}
                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                   className="absolute -top-6 -right-6 glass px-6 py-4 rounded-xl border-brand-primary/30 text-white font-display font-black text-xs tracking-[0.3em] uppercase neon-glow z-20 backdrop-blur-xl"
+                   className="absolute -top-6 -right-6 liquid-glass px-6 py-4 rounded-xl border-brand-primary/30 text-white font-display font-black text-xs tracking-[0.3em] uppercase neon-glow z-20 backdrop-blur-xl"
                 >
                   AI ENHANCED
                 </motion.div>
@@ -1155,7 +1156,7 @@ export default function App() {
               <motion.div 
                 key={step.id} 
                 variants={ITEM_STAGGER}
-                className="group p-8 brutalist-border bg-bg-surface relative overflow-hidden flex-shrink-0 w-[calc(100vw-3rem)] md:w-[calc(50vw-3rem)] lg:w-auto snap-start"
+                className="liquid-glass group p-8 brutalist-border relative overflow-hidden flex-shrink-0 w-[calc(100vw-3rem)] md:w-[calc(50vw-3rem)] lg:w-auto snap-start transition-all duration-300 rounded-xl"
               >
                 <div className="absolute top-0 right-0 font-display text-8xl font-black text-white/[0.03] -translate-y-4 translate-x-1 group-hover:text-brand-primary/5 transition-colors">
                   {step.id}
@@ -1188,9 +1189,9 @@ export default function App() {
             <motion.div 
               variants={ITEM_STAGGER}
               whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-              className="glass p-8 rounded-sm border-white/5 flex flex-col relative group"
+              className="liquid-glass p-8 rounded-xl border-white/10 flex flex-col relative group"
             >
-              <div className="absolute inset-0 border border-transparent group-hover:border-brand-primary/30 transition-colors duration-300 rounded-sm pointer-events-none" />
+              <div className="absolute inset-0 border border-transparent group-hover:border-brand-primary/30 transition-colors duration-300 rounded-xl pointer-events-none" />
               <div className="mb-8">
                 <h3 className="font-display text-2xl font-bold italic mb-2">Digital Face-Lift</h3>
                 <p className="text-ink-muted text-sm font-light">The ultimate hook. High-speed, modern replacement for old sites.</p>
@@ -1229,7 +1230,7 @@ export default function App() {
               </ul>
               <button 
                 onClick={() => handleOpenMockup('facelift')}
-                className="w-full py-4 bg-white/5 text-white font-bold uppercase tracking-widest hover:bg-brand-primary hover:text-bg-base transition-all"
+                className="liquid-glass w-full py-4 text-white font-bold uppercase tracking-widest hover:border-brand-primary/50 transition-all rounded-xl cursor-pointer"
               >
                 Select Package
               </button>
@@ -1239,7 +1240,7 @@ export default function App() {
             <motion.div 
               variants={ITEM_STAGGER}
               whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-              className="glass p-8 rounded-sm border-brand-primary/30 relative flex flex-col neon-glow-subtle bg-linear-to-br from-bg-surface to-bg-base overflow-hidden"
+              className="liquid-glass p-8 rounded-xl border-brand-primary/30 relative flex flex-col neon-glow-subtle bg-linear-to-br from-white/10 to-white/5 overflow-hidden"
             >
               <div className="absolute top-0 right-0 bg-brand-primary text-bg-base text-[10px] font-black px-4 py-1 uppercase tracking-widest">Best Value</div>
               <div className="mb-8">
@@ -1277,7 +1278,7 @@ export default function App() {
               </ul>
               <button 
                 onClick={() => handleOpenMockup('visibility')}
-                className="w-full py-5 bg-brand-primary text-bg-base font-bold uppercase tracking-widest hover:brightness-110 shadow-lg shadow-brand-primary/20 transition-all"
+                className="liquid-glass w-full py-4 text-white font-bold uppercase tracking-widest hover:border-brand-primary transition-all rounded-xl cursor-pointer"
               >
                 Go Visibility
               </button>
@@ -1287,9 +1288,9 @@ export default function App() {
             <motion.div 
               variants={ITEM_STAGGER}
               whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-              className="glass p-8 rounded-sm border-white/5 flex flex-col relative group"
+              className="liquid-glass p-8 rounded-xl border-white/10 flex flex-col relative group"
             >
-              <div className="absolute inset-0 border border-transparent group-hover:border-brand-primary/30 transition-colors duration-300 rounded-sm pointer-events-none" />
+              <div className="absolute inset-0 border border-transparent group-hover:border-brand-primary/30 transition-colors duration-300 rounded-xl pointer-events-none" />
               <div className="mb-8">
                 <h3 className="font-display text-2xl font-bold italic mb-2">Auto-Pilot Growth</h3>
                 <p className="text-ink-muted text-sm font-light">The premium. Saving the owner 5+ hours a week in admin work.</p>
@@ -1325,7 +1326,7 @@ export default function App() {
               </ul>
               <button 
                 onClick={() => handleOpenMockup('growth')}
-                className="w-full py-4 bg-white/5 text-white font-bold uppercase tracking-widest hover:bg-brand-primary hover:text-bg-base transition-all"
+                className="liquid-glass w-full py-4 text-white font-bold uppercase tracking-widest hover:border-brand-primary/50 transition-all rounded-xl cursor-pointer"
               >
                 Go Premium
               </button>
@@ -1355,7 +1356,7 @@ export default function App() {
                 key={review.client}
                 custom={i}
                 {...STAGGER}
-                className="glass brutalist-border flex flex-col group overflow-hidden flex-shrink-0 w-[calc(100vw-3rem)] md:w-[calc(50vw-3rem)] lg:w-auto snap-start"
+                className="liquid-glass flex flex-col group overflow-hidden flex-shrink-0 w-[calc(100vw-3rem)] md:w-[calc(50vw-3rem)] lg:w-auto snap-start transition-all duration-300 rounded-xl relative"
               >
                 <div className="aspect-video relative overflow-hidden">
                   <img 
@@ -1364,16 +1365,31 @@ export default function App() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
                   />
-                  <div className="absolute inset-0 bg-bg-base/40 group-hover:bg-bg-base/20 transition-colors" />
-                  <div className="absolute top-4 left-4 glass px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest text-brand-primary">
+                  <div className="absolute inset-0 bg-linear-to-t from-bg-base via-bg-base/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                  <div className="absolute top-4 left-4 liquid-glass px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-brand-primary border-brand-primary/30">
                     {review.business}
                   </div>
                 </div>
-                <div className="p-8 flex-1 flex flex-col">
-                  <p className="text-ink-muted italic mb-6 flex-1">"{review.quote}"</p>
-                  <div className="pt-6 border-t border-white/5">
-                    <span className="font-display font-bold text-white block">{review.client}</span>
-                    <span className="text-[10px] text-brand-primary uppercase tracking-widest font-black">Satisfied Client</span>
+                <div className="p-8 flex-1 flex flex-col relative">
+                  {/* Decorative quote mark */}
+                  <div className="absolute top-4 right-8 text-6xl font-display text-white/5 pointer-events-none select-none">"</div>
+                  
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3 h-3 text-brand-primary fill-current" />
+                    ))}
+                  </div>
+
+                  <p className="text-white text-base leading-relaxed italic mb-8 flex-1 relative z-10">"{review.quote}"</p>
+                  
+                  <div className="pt-6 border-t border-white/10 flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center text-brand-primary font-bold">
+                       {review.client.charAt(0)}
+                    </div>
+                    <div>
+                      <span className="font-display font-bold text-white block leading-tight">{review.client}</span>
+                      <span className="text-[10px] text-brand-primary uppercase tracking-widest font-black">Satisfied Client</span>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -1394,11 +1410,11 @@ export default function App() {
             {faqs.map((faq, i) => (
               <motion.div 
                 key={i} 
-                className="border border-white/5 bg-white/[0.02] rounded-sm overflow-hidden"
+                className="liquid-glass border border-white/10 rounded-xl overflow-hidden mb-4 last:mb-0 transition-all duration-300"
               >
                 <button 
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full p-6 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors"
+                  className="w-full p-6 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors cursor-pointer"
                 >
                   <span className="font-bold tracking-wide italic">{faq.question}</span>
                   {openFaq === i ? <Minus className="w-4 h-4 text-brand-primary" /> : <Plus className="w-4 h-4 text-brand-primary" />}
@@ -1431,7 +1447,7 @@ export default function App() {
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-            <a href="mailto:consultprompts@gmail.com" className="flex items-center gap-4 p-6 glass brutalist-border group min-w-0">
+            <a href="mailto:consultprompts@gmail.com" className="flex items-center gap-4 p-6 liquid-glass brutalist-border rounded-xl group min-w-0 transition-all duration-300 cursor-pointer">
               <div className="p-3 rounded bg-brand-primary/10 text-brand-primary group-hover:bg-brand-primary group-hover:text-bg-base transition-colors shrink-0">
                 <MailIcon className="w-6 h-6" />
               </div>
@@ -1440,7 +1456,7 @@ export default function App() {
                 <span className="text-sm md:text-base lg:text-lg font-display font-bold break-words block leading-tight">consultprompts@gmail.com</span>
               </div>
             </a>
-            <a href="https://instagram.com/consultprompts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-6 glass brutalist-border group min-w-0">
+            <a href="https://instagram.com/consultprompts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-6 liquid-glass brutalist-border rounded-xl group min-w-0 transition-all duration-300 cursor-pointer">
               <div className="p-3 rounded bg-brand-secondary/10 text-brand-secondary group-hover:bg-brand-secondary group-hover:text-bg-base transition-colors shrink-0">
                 <Instagram className="w-6 h-6" />
               </div>
@@ -1449,7 +1465,7 @@ export default function App() {
                 <span className="text-sm md:text-base lg:text-lg font-display font-bold truncate block">@consultprompts</span>
               </div>
             </a>
-            <a href="https://wa.me/13026622736" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-6 glass brutalist-border group min-w-0">
+            <a href="https://wa.me/13026622736" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-6 liquid-glass brutalist-border rounded-xl group min-w-0 transition-all duration-300 cursor-pointer">
               <div className="p-3 rounded bg-green-500/10 text-green-500 group-hover:bg-green-500 group-hover:text-bg-base transition-colors shrink-0">
                 <MessageCircle className="w-6 h-6" />
               </div>
@@ -1471,7 +1487,7 @@ export default function App() {
           <motion.div {...FADE_UP} transition={{ delay: 0.2 }}>
             <button 
               onClick={handleOpenMockup}
-              className="px-8 md:px-12 py-5 md:py-6 bg-bg-base text-white font-black text-xl md:text-2xl uppercase tracking-widest hover:scale-105 transition-transform"
+              className="liquid-glass px-8 md:px-12 py-4 md:py-5 text-white font-black text-xl md:text-2xl uppercase tracking-widest hover:scale-105 transition-transform rounded-xl border border-white/20 cursor-pointer"
             >
               Claim Your Spot
             </button>
@@ -1507,15 +1523,15 @@ export default function App() {
           </div>
           
           <div className="flex gap-8 text-xs font-bold uppercase tracking-widest text-ink-muted">
-            <a href="mailto:consultprompts@gmail.com" className="flex items-center gap-2 hover:text-white transition-colors">
+            <a href="mailto:consultprompts@gmail.com" className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
               <Mail className="w-4 h-4" />
               Email
             </a>
-            <a href="https://wa.me/13026622736" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+            <a href="https://wa.me/13026622736" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
               <MessageCircle className="w-4 h-4" />
               WhatsApp
             </a>
-            <a href="https://instagram.com/consultprompts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+            <a href="https://instagram.com/consultprompts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
               <Instagram className="w-4 h-4" />
               Instagram
             </a>
