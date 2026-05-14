@@ -100,6 +100,8 @@ export default function App() {
   const [activePanel, setActivePanel] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHoveringHero, setIsHoveringHero] = useState(false);
 
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -264,6 +266,14 @@ export default function App() {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   const reviews = [
     {
@@ -438,19 +448,24 @@ export default function App() {
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Business Type</label>
                       <input required name="business" type="text" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors" placeholder="Nail Salon / Local Service" />
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Package Selection</label>
-                      <select 
-                        required 
-                        name="package" 
-                        value={selectedPackage} 
-                        onChange={(e) => setSelectedPackage(e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors appearance-none cursor-pointer"
-                      >
-                        <option value="facelift" className="bg-bg-surface">Digital Face-Lift ($299)</option>
-                        <option value="visibility" className="bg-bg-surface">Visibility Booster ($499)</option>
-                        <option value="growth" className="bg-bg-surface">Auto-Pilot Growth ($699)</option>
-                      </select>
+                    <div className="space-y-4">
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Select Your Package</label>
+                      <div className="relative">
+                        <select 
+                          required 
+                          name="package" 
+                          value={selectedPackage} 
+                          onChange={(e) => setSelectedPackage(e.target.value)}
+                          className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors appearance-none cursor-pointer pr-12"
+                        >
+                          <option value="facelift" className="bg-bg-surface">Digital Face-Lift ($299)</option>
+                          <option value="visibility" className="bg-bg-surface">Visibility Booster ($499)</option>
+                          <option value="growth" className="bg-bg-surface">Auto-Pilot Growth ($699)</option>
+                        </select>
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-ink-muted">
+                          <ChevronDown className="w-5 h-5" />
+                        </div>
+                      </div>
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Message (Optional)</label>
@@ -750,8 +765,8 @@ export default function App() {
       </AnimatePresence>
 
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-bg-base/80 backdrop-blur-md ${
-        isNavShrunk ? 'py-3 md:py-4 px-6' : 'py-6 px-6'
+      <nav className={`fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-bg-base/80 backdrop-blur-md transition-all duration-300 ${
+        isNavShrunk ? 'py-2 md:py-4 px-4 md:px-6' : 'py-3 md:py-6 px-4 md:px-6'
       }`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className={`flex items-center gap-2 ${isNavShrunk ? 'scale-90 origin-left' : 'scale-100'}`}>
@@ -910,120 +925,232 @@ export default function App() {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <header id="hero" aria-label="Hero section: Local Business Web Design Agency" className="relative pt-36 pb-16 md:pt-40 md:pb-20 px-6 overflow-hidden">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-          <motion.div {...FADE_UP}>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-primary/20 bg-brand-primary/5 text-brand-primary text-xs font-bold uppercase tracking-widest mb-6" aria-label="Service status">
-              <div className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
-              Accepting new partners.
-            </div>
-            <h1 className="font-display text-5xl sm:text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-8">
-              Why settle for a <span className="text-ink-muted italic">mediocre site</span> when you can have a <span className="text-brand-primary">beast?</span>
-            </h1>
-            <p className="text-base md:text-xl text-ink-muted max-w-xl mb-10 leading-relaxed font-light">
-              Don't pay $5,000 to a slow agency. Get a <span className="font-medium text-white">high-performance, mobile-optimized website</span> for your local business in <span className="text-white font-medium italic underline decoration-brand-primary underline-offset-4 whitespace-nowrap">72 hours</span>.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button 
-                onClick={handleOpenMockup}
-                className="group relative px-8 py-4 bg-brand-primary text-bg-base font-bold text-lg uppercase tracking-wider rounded-sm overflow-hidden transition-all hover:pr-12 md:w-auto w-full"
+      <header 
+        id="hero" 
+        onMouseEnter={() => setIsHoveringHero(true)}
+        onMouseLeave={() => setIsHoveringHero(false)}
+        className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden min-h-[90vh] flex items-center"
+      >
+        {/* Modern Background Visualizations */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Main Animated Orb */}
+          <motion.div 
+            animate={{
+              x: mousePosition.x * 0.05,
+              y: mousePosition.y * 0.05,
+            }}
+            className="absolute top-1/4 -right-1/4 w-[600px] h-[600px] bg-brand-primary/10 rounded-full blur-[120px] mix-blend-screen opacity-50" 
+          />
+          <motion.div 
+            animate={{
+              x: mousePosition.x * -0.03,
+              y: mousePosition.y * -0.03,
+            }}
+            className="absolute -bottom-1/4 -left-1/4 w-[500px] h-[500px] bg-brand-primary/5 rounded-full blur-[100px] mix-blend-screen opacity-30" 
+          />
+          
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
+          
+          {/* Floating Elements */}
+          <AnimatePresence>
+            {[...Array(6)].map((_, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ 
+                  opacity: [0.1, 0.3, 0.1],
+                  scale: [1, 1.2, 1],
+                  x: Math.sin(i) * 20,
+                  y: Math.cos(i) * 20
+                }}
+                transition={{ 
+                  duration: 4 + i, 
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="absolute text-brand-primary/20"
+                style={{
+                  top: `${20 + (i * 12)}%`,
+                  left: `${15 + (i * 15)}%`,
+                }}
               >
-                START YOUR PROJECT
-                <ArrowRight className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all w-5 h-5" />
-              </button>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9, rotateY: 20 }}
-            whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden lg:flex perspective-1000 items-center justify-center lg:justify-center"
-          >
-            <div className="relative glass p-4 rounded-xl border-white/10 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700 w-full max-w-md">
-              <div className="overflow-hidden rounded-lg">
-                <AnimatePresence mode="wait">
-                  <motion.div 
-                    key={activePanel}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.5 }}
-                    className="bg-bg-surface aspect-square flex flex-col relative group"
-                  >
-                    <div className="absolute inset-0">
-                      <img 
-                        src={reviews[activePanel].image} 
-                        className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-700" 
-                        alt={reviews[activePanel].client}
-                        referrerPolicy="no-referrer"
-                      />
-                      <div className="absolute inset-0 bg-linear-to-t from-bg-base via-bg-base/60 to-transparent" />
-                    </div>
-                    
-                    <div className="relative mt-auto p-8 md:p-10">
-                      <div className="glass px-3 py-1 rounded inline-block text-[10px] font-bold uppercase tracking-widest text-brand-primary mb-6">
-                        {reviews[activePanel].business}
-                      </div>
-                      <p className="text-xl md:text-2xl font-display font-bold italic mb-6 leading-tight text-white">
-                        "{reviews[activePanel].quote}"
-                      </p>
-                      <div className="pt-6 border-t border-white/10 flex items-center justify-between">
-                        <div>
-                          <span className="font-display font-bold text-white block">{reviews[activePanel].client}</span>
-                          <span className="text-[10px] text-brand-primary uppercase tracking-widest font-black">Satisfied Client</span>
-                        </div>
-                        <div className="flex gap-1">
-                          {[...Array(5)].map((_, i) => (
-                            <Zap key={i} className="w-3 h-3 text-brand-primary fill-current" />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-              
-              {/* Carousel Dots */}
-              <div className="absolute bottom-10 left-0 right-0 flex justify-center gap-3 z-20">
-                {reviews.map((_, i) => (
-                  <button 
-                    key={i}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActivePanel(i);
-                    }}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 relative z-30 cursor-pointer ${activePanel === i ? 'bg-brand-primary w-8' : 'bg-white/20 hover:bg-white/40'}`}
-                    aria-label={`Go to review ${i + 1}`}
-                  />
-                ))}
-              </div>
-
-              <div className="absolute -top-4 -right-4 md:-top-6 md:-right-6 glass px-4 py-3 rounded text-brand-primary font-display font-bold text-lg neon-glow z-20">
-                AGENCY QUALITY
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Stats Strip */}
-        <div className="max-w-7xl mx-auto mt-16 md:mt-24 border-y border-white/5 py-12">
-          <motion.div 
-            variants={CONTAINER_STAGGER}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
-          >
-            {stats.map((stat) => (
-              <motion.div key={stat.label} variants={ITEM_STAGGER} className="flex flex-col items-center md:items-start">
-                <span className="text-3xl md:text-5xl font-display font-bold text-white mb-2">{stat.value}</span>
-                <span className="text-xs uppercase tracking-[0.2em] font-bold text-ink-muted">{stat.label}</span>
+                <Plus className="w-4 h-4" />
               </motion.div>
             ))}
-          </motion.div>
+          </AnimatePresence>
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10 w-full">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
+            <motion.div 
+              className="lg:col-span-7"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-primary"></span>
+                </span>
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-white/70">
+                  Precision Engineering for Local Brands
+                </span>
+              </div>
+              
+              <h1 className="font-display text-6xl sm:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tighter mb-8">
+                Websites that <br/>
+                <span className="text-brand-primary italic">actually</span> build <br/>
+                your empire.
+              </h1>
+              
+              <p className="text-lg md:text-xl text-ink-muted max-w-xl mb-12 leading-relaxed font-light">
+                Why pay $5k for mediocrity? We build <span className="text-white font-medium">high-velocity, high-conversion digital experiences</span> with AI-powered efficiency. <span className="italic">Ready in 72 hours.</span>
+              </p>
+              
+              <div className="flex flex-col sm:flex-row items-center gap-6">
+                <button 
+                  onClick={() => handleOpenMockup()}
+                  className="group relative px-10 py-5 bg-brand-primary text-bg-base font-bold text-lg uppercase tracking-widest rounded-sm overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto text-center"
+                >
+                  START YOUR PROJECT
+                </button>
+                <div className="flex -space-x-3 items-center">
+                   {[1, 2, 3, 4].map((i) => (
+                     <div key={i} className="w-10 h-10 rounded-full border-2 border-bg-base bg-bg-surface overflow-hidden">
+                       <img src={`https://i.pravatar.cc/100?u=${i}`} alt="user" className="w-full h-full object-cover" />
+                     </div>
+                   ))}
+                   <div className="pl-6">
+                     <div className="flex gap-1 mb-1">
+                       {[...Array(5)].map((_, i) => (
+                         <Zap key={i} className="w-3 h-3 text-brand-primary fill-current" />
+                       ))}
+                     </div>
+                     <p className="text-[10px] uppercase tracking-widest font-bold text-ink-muted">500+ Sites Shipped</p>
+                   </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div 
+              className="lg:col-span-5 hidden lg:block"
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="relative group">
+                {/* Decoration */}
+                <div className="absolute -inset-1 bg-linear-to-r from-brand-primary/50 to-transparent rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+                
+                <div className="relative glass p-2 rounded-2xl border-white/10 shadow-3xl transform group-hover:-translate-y-2 transition-transform duration-500">
+                  <div className="overflow-hidden rounded-xl bg-bg-base">
+                    <AnimatePresence mode="wait">
+                      <motion.div 
+                        key={activePanel}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.4 }}
+                        className="aspect-[4/5] relative"
+                      >
+                        <img 
+                          src={reviews[activePanel].image} 
+                          className="absolute inset-0 w-full h-full object-cover opacity-60" 
+                          alt={reviews[activePanel].client}
+                          referrerPolicy="no-referrer"
+                        />
+                        <div className="absolute inset-0 bg-linear-to-t from-bg-base via-bg-base/20 to-transparent" />
+                        
+                        <div className="absolute inset-x-0 bottom-0 p-8 pt-20">
+                          <div className="flex gap-1 mb-4">
+                            {[...Array(5)].map((_, i) => (
+                              <Zap key={i} className="w-4 h-4 text-brand-primary fill-current" />
+                            ))}
+                          </div>
+                          <p className="text-2xl font-display font-bold italic text-white mb-6 leading-tight">
+                            "{reviews[activePanel].quote}"
+                          </p>
+                          <div className="flex items-center gap-4">
+                            <div className="h-10 w-1 bg-brand-primary rounded-full"></div>
+                            <div>
+                                <span className="block font-bold text-white tracking-wide uppercase text-sm">{reviews[activePanel].client}</span>
+                                <span className="text-[10px] text-brand-primary font-black uppercase tracking-[0.2em]">{reviews[activePanel].business}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                  
+                  {/* Indicators */}
+                  <div className="absolute top-6 right-6 flex flex-col gap-2">
+                    {reviews.map((_, i) => (
+                      <button 
+                        key={i}
+                        onClick={() => setActivePanel(i)}
+                        className={`w-1 transition-all duration-300 ${activePanel === i ? 'h-8 bg-brand-primary' : 'h-4 bg-white/20'}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Floating "AI Quality" Tag */}
+                <motion.div 
+                   animate={{ y: [0, -10, 0] }}
+                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                   className="absolute -top-6 -right-6 glass px-6 py-4 rounded-xl border-brand-primary/30 text-white font-display font-black text-xs tracking-[0.3em] uppercase neon-glow z-20 backdrop-blur-xl"
+                >
+                  AI ENHANCED
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Floating Background Text/Branding */}
+        <div className="absolute bottom-0 left-0 right-0 py-8 border-t border-white/5 bg-bg-base/50 backdrop-blur-sm z-20 hidden md:block">
+           <div className="max-w-7xl mx-auto px-6 overflow-hidden">
+              <motion.div 
+                animate={{ x: [0, -1000] }}
+                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                className="flex whitespace-nowrap gap-24"
+              >
+                  {[...Array(10)].map((_, i) => (
+                    <span key={i} className="text-[10px] uppercase tracking-[0.5em] font-black text-white/20 flex items-center gap-4">
+                      <Zap className="w-3 h-3 text-brand-primary" />
+                      Build for Speed
+                      <Zap className="w-3 h-3 text-brand-primary" />
+                      Convert with AI
+                      <Zap className="w-3 h-3 text-brand-primary" />
+                      72-Hour Pipeline
+                    </span>
+                  ))}
+              </motion.div>
+           </div>
         </div>
       </header>
+
+      {/* Stats Strip */}
+      <div className="max-w-7xl mx-auto mt-16 md:mt-24 border-y border-white/5 py-12">
+        <motion.div 
+          variants={CONTAINER_STAGGER}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
+        >
+          {stats.map((stat) => (
+            <motion.div key={stat.label} variants={ITEM_STAGGER} className="flex flex-col items-center md:items-start">
+              <span className="text-3xl md:text-5xl font-display font-bold text-white mb-2">{stat.value}</span>
+              <span className="text-xs uppercase tracking-[0.2em] font-bold text-ink-muted">{stat.label}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
 
       {/* Process Section */}
       <section id="process" aria-label="Our Web Design Process" className="py-16 md:py-24 px-6 relative">
