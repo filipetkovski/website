@@ -28,6 +28,10 @@
   @apply bg-white/5 backdrop-blur-xl border border-white/10;
 }
 
+.liquid-glass {
+  @apply bg-linear-to-br from-white/10 via-white/5 to-white/[0.02] backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] relative overflow-hidden;
+}
+
 .brutalist-border {
   @apply border border-white/20 hover:border-brand-primary transition-colors duration-300;
 }
@@ -41,18 +45,21 @@
   perspective: 1000px;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+/* Brutalist Scrollbar */
+.brutalist-scrollbar::-webkit-scrollbar {
+  height: 4px;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-.scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+.brutalist-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
 }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch; /* Ensures momentum scrolling on older iOS versions */
+.brutalist-scrollbar::-webkit-scrollbar-thumb {
+  background: #00F0FF;
+  border-radius: 0px;
+}
+
+.brutalist-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #00F0FF rgba(255, 255, 255, 0.05);
 }
