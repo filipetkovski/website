@@ -765,14 +765,10 @@ export default function App() {
       </AnimatePresence>
 
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-bg-base/80 backdrop-blur-md transition-all duration-300 ${
-        isNavShrunk ? 'py-2 md:py-4 px-4 md:px-6' : 'py-3 md:py-6 px-4 md:px-6'
-      }`}>
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-bg-base/80 backdrop-blur-md transition-all duration-300 py-3 md:py-6 px-4 md:px-6">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className={`flex items-center gap-2 ${isNavShrunk ? 'scale-90 origin-left' : 'scale-100'}`}>
-            <div className={`flex items-center justify-center overflow-hidden ${
-              isNavShrunk ? 'w-8 h-8 md:w-10 md:h-10' : 'w-12 h-12'
-            }`}>
+          <div className="flex items-center gap-2">
+            <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
               <img 
                 src={logoSrc} 
                 alt="ConsultPrompts Logo" 
@@ -786,14 +782,10 @@ export default function App() {
                 }}
               />
             </div>
-            <span className={`font-display font-bold tracking-tight uppercase ${
-              isNavShrunk ? 'text-lg md:text-xl' : 'text-xl'
-            }`}>Consult Prompts</span>
+            <span className="font-display font-bold tracking-tight uppercase text-xl">Consult Prompts</span>
           </div>
           
-          <div className={`hidden xl:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-ink-muted ${
-            isNavShrunk ? 'opacity-90' : 'opacity-100'
-          }`}>
+          <div className="hidden xl:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-ink-muted opacity-100">
             <a href="#process" className="hover:text-brand-primary transition-colors">Process</a>
             <a href="#pricing" className="hover:text-brand-primary transition-colors">Pricing</a>
             <a href="#reviews" className="hover:text-brand-primary transition-colors">RESULTS</a>
@@ -842,7 +834,7 @@ export default function App() {
             onClick={() => setIsMobileMenuOpen(true)}
             className="xl:hidden p-2 text-white"
           >
-            <Menu className={`${isNavShrunk ? 'w-6 h-6' : 'w-8 h-8'}`} />
+            <Menu className="w-8 h-8" />
           </button>
         </div>
       </nav>
@@ -1029,7 +1021,7 @@ export default function App() {
                          <Zap key={i} className="w-3 h-3 text-brand-primary fill-current" />
                        ))}
                      </div>
-                     <p className="text-[10px] uppercase tracking-widest font-bold text-ink-muted">500+ Sites Shipped</p>
+                     <p className="text-[10px] uppercase tracking-widest font-bold text-ink-muted">30+ Sites Shipped</p>
                    </div>
                 </div>
               </div>
@@ -1111,46 +1103,31 @@ export default function App() {
           </div>
         </div>
 
-        {/* Floating Background Text/Branding */}
-        <div className="absolute bottom-0 left-0 right-0 py-8 border-t border-white/5 bg-bg-base/50 backdrop-blur-sm z-20 hidden md:block">
-           <div className="max-w-7xl mx-auto px-6 overflow-hidden">
-              <motion.div 
-                animate={{ x: [0, -1000] }}
-                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                className="flex whitespace-nowrap gap-24"
-              >
-                  {[...Array(10)].map((_, i) => (
-                    <span key={i} className="text-[10px] uppercase tracking-[0.5em] font-black text-white/20 flex items-center gap-4">
-                      <Zap className="w-3 h-3 text-brand-primary" />
-                      Build for Speed
-                      <Zap className="w-3 h-3 text-brand-primary" />
-                      Convert with AI
-                      <Zap className="w-3 h-3 text-brand-primary" />
-                      72-Hour Pipeline
-                    </span>
-                  ))}
-              </motion.div>
-           </div>
-        </div>
       </header>
 
-      {/* Stats Strip */}
-      <div className="max-w-7xl mx-auto mt-16 md:mt-24 border-y border-white/5 py-12">
-        <motion.div 
-          variants={CONTAINER_STAGGER}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
-        >
-          {stats.map((stat) => (
-            <motion.div key={stat.label} variants={ITEM_STAGGER} className="flex flex-col items-center md:items-start">
-              <span className="text-3xl md:text-5xl font-display font-bold text-white mb-2">{stat.value}</span>
-              <span className="text-xs uppercase tracking-[0.2em] font-bold text-ink-muted">{stat.label}</span>
+      {/* Stats Moving Ticker Row */}
+      <div className="relative py-10 md:py-16 border-y border-white/5 bg-bg-base/50 backdrop-blur-sm z-20">
+         <div className="max-w-7xl mx-auto px-6 overflow-hidden">
+            <motion.div 
+              animate={{ x: [0, -2000] }}
+              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+              className="flex whitespace-nowrap gap-4 md:gap-10"
+            >
+                {[...Array(12)].map((_, i) => (
+                  <span key={i} className="text-xs md:text-2xl uppercase tracking-widest font-black text-white flex items-center gap-4 md:gap-10">
+                    <Zap className="w-5 h-5 md:w-8 md:h-8 text-brand-primary fill-current" />
+                    72-HOUR DELIVERY
+                    <Zap className="w-5 h-5 md:w-8 md:h-8 text-brand-primary fill-current" />
+                    GLOBAL SEO BOOST
+                    <Zap className="w-5 h-5 md:w-8 md:h-8 text-brand-primary fill-current" />
+                    5+ YEARS EXPERIENCE
+                  </span>
+                ))}
             </motion.div>
-          ))}
-        </motion.div>
+         </div>
       </div>
+
+      {/* Remove redundant static stats strip */}
 
       {/* Process Section */}
       <section id="process" aria-label="Our Web Design Process" className="py-16 md:py-24 px-6 relative">
