@@ -85,11 +85,17 @@ const ITEM_STAGGER = {
   }
 };
 
-const STAGGER = {
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: (i: number) => ({ delay: i * 0.1, duration: 0.6 })
+const REVIEWS_VARIANTS = {
+  hidden: { opacity: 0, x: -30 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1]
+    }
+  })
 };
 
 export default function App() {
@@ -156,16 +162,13 @@ export default function App() {
     if (isAnyModalOpen) {
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
-      document.body.style.touchAction = 'none';
     } else {
       document.body.style.overflow = 'unset';
       document.documentElement.style.overflow = 'unset';
-      document.body.style.touchAction = 'unset';
     }
     return () => {
       document.body.style.overflow = 'unset';
       document.documentElement.style.overflow = 'unset';
-      document.body.style.touchAction = 'unset';
     };
   }, [isMobileMenuOpen, isModalOpen, isAuthModalOpen, isAdminPanelOpen]);
 
@@ -380,7 +383,7 @@ export default function App() {
       {/* Mockup Modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-[100] overflow-y-auto flex items-start md:items-center justify-center p-4 md:p-6 py-12 md:py-6">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -389,13 +392,13 @@ export default function App() {
                 setIsModalOpen(false);
                 setSubmitted(false);
               }}
-              className="absolute inset-0 bg-bg-base/90 backdrop-blur-sm cursor-pointer"
+              className="fixed inset-0 bg-bg-base/90 backdrop-blur-sm cursor-pointer"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-lg liquid-glass p-8 md:p-12 rounded-xl brutalist-border z-10"
+              className="relative w-full max-w-lg liquid-glass p-8 md:p-12 rounded-xl brutalist-border z-10 my-auto"
             >
               <button 
                 onClick={() => {
@@ -519,19 +522,19 @@ export default function App() {
       {/* Auth Modal */}
       <AnimatePresence>
         {isAuthModalOpen && (
-          <div className="fixed inset-0 z-[110] flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-[110] overflow-y-auto flex items-start md:items-center justify-center p-4 md:p-6 py-12 md:py-6">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsAuthModalOpen(false)}
-              className="absolute inset-0 bg-bg-base/95 backdrop-blur-md cursor-pointer"
+              className="fixed inset-0 bg-bg-base/95 backdrop-blur-md cursor-pointer"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-sm liquid-glass p-6 md:p-10 rounded-xl border-brand-primary/30 z-10"
+              className="relative w-full max-w-sm liquid-glass p-6 md:p-10 rounded-xl border-brand-primary/30 z-10 my-auto"
             >
               <div className="text-center mb-6 md:mb-8">
                 <div className="w-12 h-12 md:w-16 md:h-16 bg-brand-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
@@ -848,9 +851,9 @@ export default function App() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[150] bg-bg-base p-8 flex flex-col"
+            className="fixed inset-0 z-[150] bg-bg-base p-8 flex flex-col overflow-y-auto"
           >
-            <div className="flex justify-between items-center mb-20">
+            <div className="flex justify-between items-center mb-12 flex-shrink-0">
               <div className="flex items-center gap-2">
               <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
               <img 
@@ -885,7 +888,25 @@ export default function App() {
             </div>
 
             <div className="mt-auto space-y-6">
-              {!user ? (
+              {user ? (
+                <div className="flex flex-col gap-6">
+                  <button 
+                    onClick={() => { handleOpenMockup(); setIsMobileMenuOpen(false); }}
+                    className="liquid-glass w-full py-5 text-white font-black uppercase tracking-widest rounded-xl border-brand-primary/20 relative group cursor-pointer"
+                  >
+                    <span className="relative z-10">START YOUR PROJECT</span>
+                  </button>
+                  <div className="flex flex-col gap-4 pt-4 border-t border-white/5">
+                    <p className="text-xs text-ink-muted text-center uppercase tracking-widest">{user.email}</p>
+                    <button 
+                      onClick={() => { auth.signOut(); setIsMobileMenuOpen(false); }}
+                      className="liquid-glass w-full py-4 text-white font-bold uppercase tracking-widest rounded-xl border-white/10 cursor-pointer"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              ) : (
                 <>
                   <button 
                     onClick={() => { setAuthMode('signup'); setIsAuthModalOpen(true); setIsMobileMenuOpen(false); }}
@@ -893,25 +914,14 @@ export default function App() {
                   >
                     Sign up
                   </button>
-                </>
-              ) : (
-                <div className="flex flex-col gap-4">
-                  <p className="text-xs text-ink-muted text-center uppercase tracking-widest">{user.email}</p>
                   <button 
-                    onClick={() => { auth.signOut(); setIsMobileMenuOpen(false); }}
-                    className="liquid-glass w-full py-4 text-white font-bold uppercase tracking-widest rounded-xl border-white/10 cursor-pointer"
+                    onClick={() => { handleOpenMockup(); setIsMobileMenuOpen(false); }}
+                    className="liquid-glass w-full py-5 text-white font-black uppercase tracking-widest rounded-xl border-brand-primary/20 relative group cursor-pointer"
                   >
-                    Logout
+                    <span className="relative z-10">START YOUR PROJECT</span>
                   </button>
-                </div>
+                </>
               )}
-              
-              <button 
-                onClick={() => { handleOpenMockup(); setIsMobileMenuOpen(false); }}
-                className="liquid-glass w-full py-5 text-white font-black uppercase tracking-widest rounded-xl border-brand-primary/20 relative group cursor-pointer"
-              >
-                <span className="relative z-10">START YOUR PROJECT</span>
-              </button>
             </div>
           </motion.div>
         )}
@@ -1355,8 +1365,11 @@ export default function App() {
               <motion.div 
                 key={review.client}
                 custom={i}
-                {...STAGGER}
-                className="liquid-glass flex flex-col group overflow-hidden flex-shrink-0 w-[calc(100vw-3rem)] md:w-[calc(50vw-3rem)] lg:w-auto snap-start transition-all duration-300 rounded-xl relative"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={REVIEWS_VARIANTS}
+                className="liquid-glass flex flex-col group overflow-hidden flex-shrink-0 w-[calc(100vw-3rem)] md:w-[calc(50vw-3rem)] lg:w-auto snap-start rounded-xl relative"
               >
                 <div className="aspect-video relative overflow-hidden">
                   <img 
@@ -1487,7 +1500,7 @@ export default function App() {
           <motion.div {...FADE_UP} transition={{ delay: 0.2 }}>
             <button 
               onClick={handleOpenMockup}
-              className="liquid-glass px-8 md:px-12 py-4 md:py-5 text-white font-black text-xl md:text-2xl uppercase tracking-widest hover:scale-105 transition-transform rounded-xl border border-white/20 cursor-pointer"
+              className="liquid-glass px-8 md:px-12 py-4 md:py-5 text-white font-black text-xl md:text-2xl uppercase tracking-widest hover:scale-105 transition-transform rounded-xl border border-brand-primary/50 shadow-[0_0_20px_rgba(var(--color-brand-primary),0.2)] cursor-pointer"
             >
               Claim Your Spot
             </button>
