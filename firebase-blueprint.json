@@ -7,10 +7,11 @@
       "properties": {
         "uid": { "type": "string" },
         "email": { "type": "string" },
+        "displayName": { "type": "string" },
         "role": { "type": "string", "enum": ["customer", "admin"] },
         "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["uid", "email", "role"]
+      "required": ["uid", "email", "role", "displayName"]
     },
     "Lead": {
       "title": "Lead",
@@ -25,6 +26,17 @@
         "createdAt": { "type": "string", "format": "date-time", "description": "When the lead was submitted" }
       },
       "required": ["userId", "name", "email", "business"]
+    },
+    "WaitlistEntry": {
+      "title": "Waitlist Entry",
+      "description": "User joining the waitlist for the AI TRIO MASTERCLASS.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "joinedAt": { "type": "string", "format": "date-time" },
+        "product": { "type": "string" }
+      },
+      "required": ["email", "joinedAt", "product"]
     }
   },
   "firestore": {
@@ -35,6 +47,10 @@
     "leads": {
       "schema": "Lead",
       "description": "Collection of incoming project leads."
+    },
+    "waitlist": {
+      "schema": "WaitlistEntry",
+      "description": "Collection of users waitlisted for the masterclass."
     }
   }
 }
