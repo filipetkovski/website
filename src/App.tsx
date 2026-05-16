@@ -282,7 +282,7 @@ export default function App() {
   const reviews = [
     {
       client: "Boardwalk Fries",
-      quote: "The speed is insane. We saw a 40% increase in sales in the first week. The mobile version is flawless.",
+      quote: "Top-tier developer. Consult Prompts built an optimized site that loads instantly and works perfectly on all devices. Hit every deadline and exceeded expectations.",
       image: "boardwalk.png",
       business: "FAST FOOD RESTAURANT"
     },
