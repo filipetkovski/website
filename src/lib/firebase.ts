@@ -24,7 +24,15 @@ import {
   User as FirebaseUser
 } from 'firebase/auth';
 
-import firebaseConfig from '../../firebase-applet-config.json';
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_APIKEY,
+  authDomain: import.meta.env.VITE_AUTHDOMAIN,
+  projectId: import.meta.env.VITE_PROJECTID,
+  storageBucket: import.meta.env.VITE_STORAGEBUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGINGSENDERID,
+  firestoreDatabaseId: import.meta.env.VITE_FIRESTOREDATABASEID,
+  appId: import.meta.env.VITE_APPID,
+};
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
@@ -158,7 +166,7 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
   return userSnap.exists() ? (userSnap.data() as UserProfile) : null;
 }
 
-export async function submitLead(data: { name: string; email: string; business: string; message: string; package?: string; userId: string }) {
+export async function submitLead(data: { name: string; email: string; business: string; message: string; userId: string }) {
   const path = 'leads';
   try {
     const docRef = await addDoc(collection(db, path), {
@@ -179,32 +187,6 @@ export async function updateLeadStatus(leadId: string, status: 'pending' | 'comp
     await updateDoc(doc(db, 'leads', leadId), { status });
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
-    throw error;
-  }
-}
-
-export async function joinWaitlist(userId: string, email: string) {
-  const path = 'waitlist';
-  try {
-    await setDoc(doc(db, path, userId), {
-      email,
-      joinedAt: serverTimestamp(),
-      product: 'AI TRIO MASTERCLASS'
-    });
-    return { success: true };
-  } catch (error) {
-    handleFirestoreError(error, OperationType.WRITE, path);
-    throw error;
-  }
-}
-
-export async function checkWaitlistStatus(userId: string) {
-  const path = `waitlist/${userId}`;
-  try {
-    const snap = await getDoc(doc(db, 'waitlist', userId));
-    return snap.exists();
-  } catch (error) {
-    handleFirestoreError(error, OperationType.GET, path);
     throw error;
   }
 }
