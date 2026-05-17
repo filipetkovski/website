@@ -166,7 +166,7 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
   return userSnap.exists() ? (userSnap.data() as UserProfile) : null;
 }
 
-export async function submitLead(data: { name: string; email: string; business: string; message: string; userId: string }) {
+export async function submitLead(data: { name: string; email: string; business: string; message: string; package?: string; userId: string }) {
   const path = 'leads';
   try {
     const docRef = await addDoc(collection(db, path), {
@@ -187,6 +187,32 @@ export async function updateLeadStatus(leadId: string, status: 'pending' | 'comp
     await updateDoc(doc(db, 'leads', leadId), { status });
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
+    throw error;
+  }
+}
+
+export async function joinWaitlist(userId: string, email: string) {
+  const path = 'waitlist';
+  try {
+    await setDoc(doc(db, path, userId), {
+      email,
+      joinedAt: serverTimestamp(),
+      product: 'AI TRIO MASTERCLASS'
+    });
+    return { success: true };
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+    throw error;
+  }
+}
+
+export async function checkWaitlistStatus(userId: string) {
+  const path = `waitlist/${userId}`;
+  try {
+    const snap = await getDoc(doc(db, 'waitlist', userId));
+    return snap.exists();
+  } catch (error) {
+    handleFirestoreError(error, OperationType.GET, path);
     throw error;
   }
 }

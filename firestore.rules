@@ -62,6 +62,14 @@ service cloud.firestore {
              data.createdAt == request.time;
     }
 
+    function isValidWaitlistEntry(data) {
+      return data.keys().hasAll(['email', 'joinedAt', 'product']) &&
+             data.keys().size() == 3 &&
+             data.email == request.auth.token.email &&
+             data.product == 'AI TRIO MASTERCLASS' &&
+             data.joinedAt == request.time;
+    }
+
     // --- COLLECTIONS ---
 
     match /users/{userId} {
