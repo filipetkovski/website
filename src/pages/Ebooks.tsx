@@ -9,10 +9,11 @@ import {
   Instagram,
   X,
   ShieldCheck,
-  Loader2
+  Loader2,
+  Users
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { auth, getUserProfile, UserProfile, joinWaitlist, checkWaitlistStatus } from '../lib/firebase';
+import { auth, getUserProfile, UserProfile, joinWaitlist, checkWaitlistStatus, getEnrollmentCount } from '../lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import AuthModal from '../components/AuthModal';
 
@@ -30,6 +31,7 @@ export default function Ebooks() {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [hasJoined, setHasJoined] = useState(false);
+  const [enrollmentCount, setEnrollmentCount] = useState(87);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -44,8 +46,23 @@ export default function Ebooks() {
         setHasJoined(false);
       }
     });
+
+    // Fetch enrollment count
+    getEnrollmentCount().then(count => setEnrollmentCount(count));
+
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (isWaitlistModalOpen || isAuthModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isWaitlistModalOpen, isAuthModalOpen]);
 
   const handleWaitlistClick = () => {
     if (!user) {
@@ -61,6 +78,7 @@ export default function Ebooks() {
     try {
       await joinWaitlist(user.uid, user.email);
       setHasJoined(true);
+      setEnrollmentCount(prev => prev + 1);
     } catch (err) {
       console.error(err);
     } finally {
@@ -102,7 +120,7 @@ export default function Ebooks() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-md liquid-glass p-8 md:p-10 rounded-3xl border-brand-primary/20 z-10 my-auto shadow-2xl"
+              className="relative w-full max-w-md liquid-glass p-8 md:p-10 rounded-3xl border-brand-primary/20 z-10 shadow-2xl"
             >
               <button 
                 onClick={() => setIsWaitlistModalOpen(false)}
@@ -203,7 +221,17 @@ export default function Ebooks() {
             
             <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
               {/* Left: Ebook Mockup */}
-              <div className="w-full lg:w-1/2 perspective-1000 text-white">
+              <div className="w-full lg:w-1/2 perspective-1000 text-white relative">
+                {/* Enrollment Counter */}
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="absolute -top-4 -right-4 z-20 bg-brand-primary text-bg-base px-4 py-2 rounded-full font-display font-black italic text-sm shadow-[0_0_20px_rgba(var(--color-brand-primary),0.4)] flex items-center gap-2"
+                >
+                  <Users className="w-4 h-4" />
+                  <span>{enrollmentCount} ENROLLED</span>
+                </motion.div>
+
                 <div className="relative transform-gpu group-hover:rotate-y-6 transition-transform duration-700">
                   <div className="absolute -inset-2 bg-linear-to-r from-brand-primary to-brand-secondary rounded-xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity" />
                   <div className="aspect-[3/4] bg-linear-to-br from-bg-surface to-bg-base rounded-lg shadow-2xl overflow-hidden flex flex-col justify-between p-8 border border-white/10 relative z-10">

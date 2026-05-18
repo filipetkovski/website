@@ -199,6 +199,11 @@ export async function joinWaitlist(userId: string, email: string) {
       joinedAt: serverTimestamp(),
       product: 'AI TRIO MASTERCLASS'
     });
+
+    await updateDoc(doc(db, 'stats', 'ebooks'), {
+      enrollmentCount: increment(1)
+    });
+
     return { success: true };
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
@@ -225,6 +230,23 @@ export async function getLeads() {
     return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
     handleFirestoreError(error, OperationType.LIST, path);
+    throw error;
+  }
+}
+
+export async function getEnrollmentCount() {
+  const path = 'stats/ebooks';
+  try {
+    const snap = await getDoc(doc(db, 'stats', 'ebooks'));
+    if (snap.exists()) {
+      return snap.data().enrollmentCount as number;
+    } else {
+      // Initialize if not exists
+      await setDoc(doc(db, 'stats', 'ebooks'), { enrollmentCount: 87 });
+      return 87;
+    }
+  } catch (error) {
+    handleFirestoreError(error, OperationType.GET, path);
     throw error;
   }
 }

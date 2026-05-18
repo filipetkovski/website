@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   X, 
@@ -24,6 +24,17 @@ export default function AuthModal({ isOpen, onClose, onSuccess, initialMode = 'l
   const [authMode, setAuthMode] = useState<'login' | 'signup'>(initialMode);
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   const handleGoogleSignIn = async () => {
     try {
@@ -65,7 +76,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess, initialMode = 'l
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[150] overflow-y-auto flex items-start md:items-center justify-center p-4 md:p-6 py-12 md:py-6">
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -77,7 +88,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess, initialMode = 'l
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="relative w-full max-w-sm liquid-glass p-6 md:p-10 rounded-xl border-brand-primary/30 z-10 my-auto"
+            className="relative w-full max-w-sm liquid-glass p-6 md:p-10 rounded-xl border-brand-primary/30 z-10"
           >
             <button 
               onClick={onClose}

@@ -106,5 +106,11 @@ service cloud.firestore {
       allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
       allow get: if isSignedIn() && isValidId(leadId) && existing().userId == request.auth.uid;
     }
+
+    match /stats/{statId} {
+      allow get: if true;
+      allow update: if isSignedIn() && isEmailVerified();
+      allow create, delete: if isAdmin();
+    }
   }
 }
