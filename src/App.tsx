@@ -40,6 +40,8 @@ import {
   CloudCog,
   Star,
 } from 'lucide-react';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Ebooks from './pages/Ebooks';
 import { 
   submitLead, 
   auth, 
@@ -98,7 +100,7 @@ const REVIEWS_VARIANTS = {
   })
 };
 
-export default function App() {
+function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -282,7 +284,7 @@ export default function App() {
   const reviews = [
     {
       client: "Boardwalk Fries",
-      quote: "Top-tier developer. Consult Prompts built an optimized site that loads instantly and works perfectly on all devices. Hit every deadline and exceeded expectations.",
+      quote: "The speed is insane. We saw a 40% increase in sales in the first week. The mobile version is flawless.",
       image: "boardwalk.png",
       business: "FAST FOOD RESTAURANT"
     },
@@ -1556,5 +1558,16 @@ export default function App() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/ebooks" element={<Ebooks />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
