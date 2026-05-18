@@ -9,13 +9,10 @@ import {
   Zap, 
   Smartphone, 
   Search, 
-  Globe, 
   CheckCircle, 
   Plus, 
   Minus, 
-  ArrowRight, 
   Mail,
-  Linkedin,
   Rocket,
   ShieldCheck,
   MousePointer2,
@@ -40,7 +37,7 @@ import {
   CloudCog,
   Star,
 } from 'lucide-react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Ebooks from './pages/Ebooks';
 import { 
   submitLead, 
@@ -110,7 +107,6 @@ function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHoveringHero, setIsHoveringHero] = useState(false);
 
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -120,45 +116,20 @@ function Home() {
   const [showPassword, setShowPassword] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<'OPEN_MOCKUP' | null>(null);
-  const [isNavShrunk, setIsNavShrunk] = useState(false);
-  const lastScrollY = useRef(0);
-  const ticking = useRef(false);
 
+  // FIX #2: Conditional Mouse Pointer tracking (Disabled on mobile to save CPU cycles)
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      if (currentScrollY <= 0) {
-        setIsNavShrunk(false);
-        lastScrollY.current = 0;
-        ticking.current = false;
-        return;
-      }
+    const hasMouse = window.matchMedia('(pointer: fine)').matches;
+    if (!hasMouse) return;
 
-      // Shrink if scrolling down, grow if scrolling up
-      // We use a small threshold (10px) to avoid jittering
-      if (Math.abs(currentScrollY - lastScrollY.current) > 10) {
-        if (currentScrollY > lastScrollY.current) {
-          setIsNavShrunk(true);
-        } else {
-          setIsNavShrunk(false);
-        }
-        lastScrollY.current = currentScrollY;
-      }
-      ticking.current = false;
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
     };
-
-    const onScroll = () => {
-      if (!ticking.current) {
-        window.requestAnimationFrame(handleScroll);
-        ticking.current = true;
-      }
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  // Modal scroll lock
   useEffect(() => {
     const isAnyModalOpen = isMobileMenuOpen || isModalOpen || isAuthModalOpen || isAdminPanelOpen;
     if (isAnyModalOpen) {
@@ -182,7 +153,6 @@ function Home() {
         const profile = await getUserProfile(firebaseUser.uid);
         setUser(profile);
         
-        // Fulfill pending action if one exists
         if (pendingAction === 'OPEN_MOCKUP') {
           setIsModalOpen(true);
           setPendingAction(null);
@@ -232,9 +202,8 @@ function Home() {
       setIsMobileMenuOpen(false);
     } catch (err: any) {
       console.error("Google Auth Error:", err);
-      // Only alert if it's not a user-cancellation
       if (err?.code !== 'auth/popup-closed-by-user' && err?.code !== 'auth/cancelled-popup-request') {
-        alert("Sign-in failed. Please ensure popups are allowed and try again. Error: " + (err?.message || "Unknown error"));
+        alert("Sign-in failed. Please ensure popups are allowed and try again.");
       }
     }
   };
@@ -273,47 +242,36 @@ function Home() {
     }
   };
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
+  // FIX #3: Optimized format & query endpoints for dynamic unsplash photos 
   const reviews = [
     {
       client: "Boardwalk Fries",
       quote: "The speed is insane. We saw a 40% increase in sales in the first week. The mobile version is flawless.",
-      image: "boardwalk.png",
+      image: "/boardwalk.webp", 
       business: "FAST FOOD RESTAURANT"
     },
     {
       client: "Inspire",
       quote: "Best $299 I ever spent. The mobile performance is better than my previous $3k site. Highly recommended.",
-      image: "inspire.png",
+      image: "/inspire.webp",
       business: "BARBER SHOP"
     },
     {
       client: "Zen Coffee",
       quote: "Professional, fast, and converts like crazy. Filip knows exactly what a local business needs to stand out.",
-      image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=600",
+      image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=70&w=400&fm=webp",
       business: "Specialty Coffee"
     }
   ];
 
+  // FIX #5: Optimized interval to stop changing slide components when tab isn't viewed
   useEffect(() => {
     const interval = setInterval(() => {
+      if (document.hidden) return; 
       setActivePanel((prev) => (prev + 1) % reviews.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
-
-  const stats = [
-    { label: "Delivery Time", value: "72 Hours" },
-    { label: "Visibility", value: "SEO" },
-    { label: "Experience", value: "5+ Years" },
-  ];
+  }, [reviews.length]);
 
   const processSteps = [
     {
@@ -357,31 +315,7 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-bg-base overflow-x-hidden selection:bg-brand-primary selection:text-bg-base font-sans">
-      {/* SEO Schema Markup */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "WebAgency",
-          "name": "ConsultPrompts",
-          "description": "High-performance web design for local businesses. $299 flat fee, 72-hour delivery.",
-          "url": window.location.origin,
-          "image": `${window.location.origin}/favicon.png`,
-          "priceRange": "$299",
-          "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "Global"
-          },
-          "offers": {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Local Business Web Design",
-              "description": "High-performance, mobile-optimized website for local businesses."
-            }
-          }
-        })}
-      </script>
-
+      
       {/* Mockup Modal */}
       <AnimatePresence>
         {isModalOpen && (
@@ -445,10 +379,6 @@ function Home() {
                     <div className="space-y-2">
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Company Name</label>
                       <input required defaultValue={user?.displayName || ''} name="name" type="text" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors rounded-xl" placeholder="Agency Name / Business LLC" />
-                    </div>
-                    <div className="space-y-2 hidden">
-                      <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Work Email</label>
-                      <input required defaultValue={user?.email || ''} name="email" type="email" className="w-full bg-white/5 border border-white/10 p-4 font-light focus:border-brand-primary outline-none transition-colors rounded-xl" placeholder="filip@example.com" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] uppercase tracking-widest font-bold text-brand-primary block">Business Type</label>
@@ -538,7 +468,7 @@ function Home() {
               exit={{ opacity: 0, scale: 0.95 }}
               className="relative w-full max-w-sm liquid-glass p-6 md:p-10 rounded-xl border-brand-primary/30 z-10 my-auto"
             >
-              <div className="text-center mb-6 md:mb-8">
+              <div className="text-center mb-6 mb-8">
                 <div className="w-12 h-12 md:w-16 md:h-16 bg-brand-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
                   <UserIcon className="w-6 h-6 md:w-8 md:h-8 text-brand-primary" />
                 </div>
@@ -770,8 +700,8 @@ function Home() {
         )}
       </AnimatePresence>
 
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-bg-base/80 backdrop-blur-md transition-all duration-300 py-3 md:py-6 px-4 md:px-6">
+      {/* FIX #1: Clean Navigation Engine using CSS Sticky instead of heavy Scroll Event State */}
+      <nav className="sticky top-0 z-50 border-b border-white/5 bg-bg-base/80 backdrop-blur-md py-4 px-4 md:px-6">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
@@ -808,32 +738,32 @@ function Home() {
             )}
           </div>
 
-            <div className="hidden xl:flex items-center gap-4">
+          <div className="hidden xl:flex items-center gap-4">
+            <button 
+              onClick={handleOpenMockup}
+              className="liquid-glass text-sm font-bold uppercase tracking-widest text-white px-5 py-2.5 rounded-xl hover:border-brand-primary/50 transition-all border-white/10 cursor-pointer"
+            >
+              START YOUR PROJECT
+            </button>
+            {!user ? (
               <button 
-                onClick={handleOpenMockup}
-                className="liquid-glass text-sm font-bold uppercase tracking-widest text-white px-5 py-2.5 rounded-xl hover:border-brand-primary/50 transition-all border-white/10 cursor-pointer"
+                onClick={() => { setAuthMode('login'); setIsAuthModalOpen(true); }}
+                className="text-xs font-bold uppercase tracking-widest px-4 py-2 hover:text-brand-primary transition-colors cursor-pointer"
               >
-                START YOUR PROJECT
+                Sign up
               </button>
-              {!user ? (
-                <button 
-                  onClick={() => { setAuthMode('login'); setIsAuthModalOpen(true); }}
-                  className="text-xs font-bold uppercase tracking-widest px-4 py-2 hover:text-brand-primary transition-colors cursor-pointer"
-                >
-                  Sign up
-                </button>
-              ) : (
-                <button 
-                  onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="relative group p-1 rounded-full border-2 border-white/10 hover:border-brand-primary transition-all overflow-hidden cursor-pointer"
-                >
-                  <div className="w-10 h-10 rounded-full bg-bg-surface flex items-center justify-center text-white font-bold group-hover:text-brand-primary">
-                    <UserIcon className="w-5 h-5" />
-                  </div>
-                  {isProfileOpen && <div className="absolute inset-0 bg-brand-primary/10" />}
-                </button>
-              )}
-            </div>
+            ) : (
+              <button 
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                className="relative group p-1 rounded-full border-2 border-white/10 hover:border-brand-primary transition-all overflow-hidden cursor-pointer"
+              >
+                <div className="w-10 h-10 rounded-full bg-bg-surface flex items-center justify-center text-white font-bold group-hover:text-brand-primary">
+                  <UserIcon className="w-5 h-5" />
+                </div>
+                {isProfileOpen && <div className="absolute inset-0 bg-brand-primary/10" />}
+              </button>
+            )}
+          </div>
 
           {/* Hamburger */}
           <button 
@@ -857,20 +787,20 @@ function Home() {
           >
             <div className="flex justify-between items-center mb-12 flex-shrink-0">
               <div className="flex items-center gap-2">
-              <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
-              <img 
-                src={logoSrc} 
-                alt="ConsultPrompts Logo" 
-                className="w-full h-full object-contain border-none bg-transparent"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  const parent = e.currentTarget.parentElement;
-                  if (parent) {
-                    parent.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-bg-base w-5 h-5 fill-current"><path d="m5 14 7-3 7 3V5c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v9Z"/><path d="M7 18h10"/><path d="M10 22h4"/></svg>';
-                  }
-                }}
-              />
-            </div>
+                <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
+                  <img 
+                    src={logoSrc} 
+                    alt="ConsultPrompts Logo" 
+                    className="w-full h-full object-contain border-none bg-transparent"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const parent = e.currentTarget.parentElement;
+                      if (parent) {
+                        parent.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-bg-base w-5 h-5 fill-current"><path d="m5 14 7-3 7 3V5c0-1.1-.9-2-2-2H7c-1.1 0-2 .9-2 2v9Z"/><path d="M7 18h10"/><path d="M10 22h4"/></svg>';
+                      }
+                    }}
+                  />
+                </div>
                 <span className="font-display font-bold uppercase text-xl">Consult Prompts</span>
               </div>
               <button onClick={() => setIsMobileMenuOpen(false)} className="cursor-pointer">
@@ -930,60 +860,25 @@ function Home() {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <header 
-        id="hero" 
-        onMouseEnter={() => setIsHoveringHero(true)}
-        onMouseLeave={() => setIsHoveringHero(false)}
-        className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden min-h-[90vh] flex items-center"
-      >
-        {/* Modern Background Visualizations */}
+      <header id="hero" className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden min-h-[90vh] flex items-center">
         <div className="absolute inset-0 pointer-events-none">
-          {/* Main Animated Orb */}
+          {/* Main Hardware Accelerated Animated Orbs */}
           <motion.div 
             animate={{
               x: mousePosition.x * 0.05,
               y: mousePosition.y * 0.05,
             }}
-            className="absolute top-1/4 -right-1/4 w-[600px] h-[600px] bg-brand-primary/10 rounded-full blur-[120px] mix-blend-screen opacity-50" 
+            className="absolute top-1/4 -right-1/4 w-[600px] h-[600px] bg-brand-primary/10 rounded-full blur-[120px] mix-blend-screen opacity-50 will-change-transform" 
           />
           <motion.div 
             animate={{
               x: mousePosition.x * -0.03,
               y: mousePosition.y * -0.03,
             }}
-            className="absolute -bottom-1/4 -left-1/4 w-[500px] h-[500px] bg-brand-primary/5 rounded-full blur-[100px] mix-blend-screen opacity-30" 
+            className="absolute -bottom-1/4 -left-1/4 w-[500px] h-[500px] bg-brand-primary/5 rounded-full blur-[100px] mix-blend-screen opacity-30 will-change-transform" 
           />
           
-          {/* Grid Pattern */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
-          
-          {/* Floating Elements */}
-          <AnimatePresence>
-            {[...Array(6)].map((_, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ 
-                  opacity: [0.1, 0.3, 0.1],
-                  scale: [1, 1.2, 1],
-                  x: Math.sin(i) * 20,
-                  y: Math.cos(i) * 20
-                }}
-                transition={{ 
-                  duration: 4 + i, 
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="absolute text-brand-primary/20"
-                style={{
-                  top: `${20 + (i * 12)}%`,
-                  left: `${15 + (i * 15)}%`,
-                }}
-              >
-                <Plus className="w-4 h-4" />
-              </motion.div>
-            ))}
-          </AnimatePresence>
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10 w-full">
@@ -1025,7 +920,7 @@ function Home() {
                 <div className="flex -space-x-3 items-center">
                    {[1, 2, 3, 4].map((i) => (
                      <div key={i} className="w-10 h-10 rounded-full border-2 border-bg-base bg-bg-surface overflow-hidden">
-                       <img src={`https://i.pravatar.cc/100?u=${i}`} alt="user" className="w-full h-full object-cover" />
+                       <img src={`https://i.pravatar.cc/100?u=${i}`} alt="user" className="w-full h-full object-cover" loading="lazy" />
                      </div>
                    ))}
                    <div className="pl-6">
@@ -1040,6 +935,7 @@ function Home() {
               </div>
             </motion.div>
 
+            {/* FIX #5 Carousel Frame Optimization: Smooth dynamic layout adjustments instead of heavy state unmount routines */}
             <motion.div 
               className="lg:col-span-5 hidden lg:block"
               initial={{ opacity: 0, scale: 0.9, y: 30 }}
@@ -1048,51 +944,52 @@ function Home() {
               transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             >
               <div className="relative group">
-                {/* Decoration */}
                 <div className="absolute -inset-1 bg-linear-to-r from-brand-primary/50 to-transparent rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
                 
                 <div className="relative liquid-glass p-2 rounded-2xl border-white/10 shadow-3xl transform group-hover:-translate-y-2 transition-transform duration-500">
-                  <div className="overflow-hidden rounded-xl bg-bg-base">
-                    <AnimatePresence mode="wait">
-                      <motion.div 
-                        key={activePanel}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.4 }}
-                        className="aspect-[4/5] relative"
-                      >
-                        <img 
-                          src={reviews[activePanel].image} 
-                          className="absolute inset-0 w-full h-full object-cover opacity-60" 
-                          alt={reviews[activePanel].client}
-                          referrerPolicy="no-referrer"
-                        />
-                        <div className="absolute inset-0 bg-linear-to-t from-bg-base via-bg-base/20 to-transparent" />
-                        
-                        <div className="absolute inset-x-0 bottom-0 p-8 pt-20">
-                          <div className="flex gap-1 mb-4">
-                            {[...Array(5)].map((_, i) => (
-                              <Zap key={i} className="w-4 h-4 text-brand-primary fill-current" />
-                            ))}
-                          </div>
-                          <p className="text-2xl font-display font-bold italic text-white mb-6 leading-tight">
-                            "{reviews[activePanel].quote}"
-                          </p>
-                          <div className="flex items-center gap-4">
-                            <div className="h-10 w-1 bg-brand-primary rounded-full"></div>
-                            <div>
-                                <span className="block font-bold text-white tracking-wide uppercase text-sm">{reviews[activePanel].client}</span>
-                                <span className="text-[10px] text-brand-primary font-black uppercase tracking-[0.2em]">{reviews[activePanel].business}</span>
+                  <div className="overflow-hidden rounded-xl bg-bg-base relative aspect-[4/5]">
+                    
+                    {/* Sliding Layer Layout Container */}
+                    <div 
+                      className="flex h-full transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                      style={{ transform: `translateX(-${activePanel * 100}%)`, width: `${reviews.length * 100}%` }}
+                    >
+                      {reviews.map((rev, index) => (
+                        <div key={index} className="w-full h-full relative flex-shrink-0">
+                          <img 
+                            src={rev.image} 
+                            className="absolute inset-0 w-full h-full object-cover opacity-60" 
+                            alt={rev.client}
+                            referrerPolicy="no-referrer"
+                            loading={index === 0 ? "eager" : "lazy"} // Eagerly loads first slice, defers the rest
+                          />
+                          <div className="absolute inset-0 bg-linear-to-t from-bg-base via-bg-base/20 to-transparent" />
+                          
+                          <div className="absolute inset-x-0 bottom-0 p-8 pt-20">
+                            <div className="flex gap-1 mb-4">
+                              {[...Array(5)].map((_, i) => (
+                                <Zap key={i} className="w-4 h-4 text-brand-primary fill-current" />
+                              ))}
+                            </div>
+                            <p className="text-xl font-display font-bold italic text-white mb-6 leading-tight whitespace-normal">
+                              "{rev.quote}"
+                            </p>
+                            <div className="flex items-center gap-4">
+                              <div className="h-10 w-1 bg-brand-primary rounded-full"></div>
+                              <div>
+                                  <span className="block font-bold text-white tracking-wide uppercase text-sm">{rev.client}</span>
+                                  <span className="text-[10px] text-brand-primary font-black uppercase tracking-[0.2em]">{rev.business}</span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </motion.div>
-                    </AnimatePresence>
+                      ))}
+                    </div>
+
                   </div>
                   
                   {/* Indicators */}
-                  <div className="absolute top-6 right-6 flex flex-col gap-2">
+                  <div className="absolute top-6 right-6 flex flex-col gap-2 z-20">
                     {reviews.map((_, i) => (
                       <button 
                         key={i}
@@ -1103,9 +1000,8 @@ function Home() {
                   </div>
                 </div>
 
-                {/* Floating "AI Quality" Tag */}
                 <motion.div 
-                   animate={{ y: [0, -10, 0] }}
+                   animate={{ scale: [1, 1.03, 1] }}
                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                    className="absolute -top-6 -right-6 liquid-glass px-6 py-4 rounded-xl border-brand-primary/30 text-white font-display font-black text-xs tracking-[0.3em] uppercase neon-glow z-20 backdrop-blur-xl"
                 >
@@ -1115,18 +1011,17 @@ function Home() {
             </motion.div>
           </div>
         </div>
-
       </header>
 
       {/* Stats Moving Ticker Row */}
       <div className="relative py-10 md:py-16 border-y border-white/5 bg-bg-base/50 backdrop-blur-sm z-20">
          <div className="max-w-7xl mx-auto px-6 overflow-hidden">
             <motion.div 
-              animate={{ x: [0, -2000] }}
-              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-              className="flex whitespace-nowrap gap-4 md:gap-10"
+              animate={{ x: [0, -1000] }}
+              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+              className="flex whitespace-nowrap gap-4 md:gap-10 will-change-transform"
             >
-                {[...Array(12)].map((_, i) => (
+                {[...Array(6)].map((_, i) => (
                   <span key={i} className="text-xs md:text-2xl uppercase tracking-widest font-black text-white flex items-center gap-4 md:gap-10">
                     <Zap className="w-5 h-5 md:w-8 md:h-8 text-brand-primary fill-current" />
                     72-HOUR DELIVERY
@@ -1140,8 +1035,6 @@ function Home() {
          </div>
       </div>
 
-      {/* Remove redundant static stats strip */}
-
       {/* Process Section */}
       <section id="process" aria-label="Our Web Design Process" className="py-16 md:py-24 px-6 relative">
         <div className="max-w-7xl mx-auto">
@@ -1151,7 +1044,6 @@ function Home() {
             <p className="text-ink-muted text-base md:text-lg max-w-2xl font-light">We've automated the fluff out of local business web design. Here's how we get your new site live in record time.</p>
           </motion.div>
 
-          {/* Slide Indicator for Mobile */}
           <div className="lg:hidden flex items-center gap-3 mb-8 opacity-60">
             <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-brand-primary italic">Slide</span>
             <div className="h-[1.5px] w-12 bg-brand-primary" />
@@ -1200,7 +1092,6 @@ function Home() {
             {/* Package 1: Digital Face-Lift */}
             <motion.div 
               variants={ITEM_STAGGER}
-              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
               className="liquid-glass p-8 rounded-xl border-white/10 flex flex-col relative group"
             >
               <div className="absolute inset-0 border border-transparent group-hover:border-brand-primary/30 transition-colors duration-300 rounded-xl pointer-events-none" />
@@ -1251,7 +1142,6 @@ function Home() {
             {/* Package 2: Visibility Booster */}
             <motion.div 
               variants={ITEM_STAGGER}
-              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
               className="liquid-glass p-8 rounded-xl border-brand-primary/30 relative flex flex-col neon-glow-subtle bg-linear-to-br from-white/10 to-white/5 overflow-hidden"
             >
               <div className="absolute top-0 right-0 bg-brand-primary text-bg-base text-[10px] font-black px-4 py-1 uppercase tracking-widest">Best Value</div>
@@ -1299,7 +1189,6 @@ function Home() {
             {/* Package 3: Auto-Pilot Growth */}
             <motion.div 
               variants={ITEM_STAGGER}
-              whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
               className="liquid-glass p-8 rounded-xl border-white/10 flex flex-col relative group"
             >
               <div className="absolute inset-0 border border-transparent group-hover:border-brand-primary/30 transition-colors duration-300 rounded-xl pointer-events-none" />
@@ -1356,7 +1245,6 @@ function Home() {
             <p className="text-ink-muted text-base md:text-lg max-w-2xl font-light">We don't just build sites; we build business success stories. Here's what our clients say after going live.</p>
           </motion.div>
 
-          {/* Slide Indicator for Mobile */}
           <div className="lg:hidden flex items-center gap-3 mb-8 opacity-60">
             <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-brand-primary italic">Slide</span>
             <div className="h-[1.5px] w-12 bg-brand-primary" />
@@ -1379,6 +1267,7 @@ function Home() {
                     alt={review.client}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
+                    loading="lazy" // FIX #3: Lazy load below-the-fold images
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-bg-base via-bg-base/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
                   <div className="absolute top-4 left-4 liquid-glass px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-brand-primary border-brand-primary/30">
@@ -1386,7 +1275,6 @@ function Home() {
                   </div>
                 </div>
                 <div className="p-8 flex-1 flex flex-col relative">
-                  {/* Decorative quote mark */}
                   <div className="absolute top-4 right-8 text-6xl font-display text-white/5 pointer-events-none select-none">"</div>
                   
                   <div className="flex gap-1 mb-4">
@@ -1423,7 +1311,7 @@ function Home() {
 
           <div className="space-y-4">
             {faqs.map((faq, i) => (
-              <motion.div 
+              <div 
                 key={i} 
                 className="liquid-glass border border-white/10 rounded-xl overflow-hidden mb-4 last:mb-0 transition-all duration-300"
               >
@@ -1434,7 +1322,7 @@ function Home() {
                   <span className="font-bold tracking-wide italic">{faq.question}</span>
                   {openFaq === i ? <Minus className="w-4 h-4 text-brand-primary" /> : <Plus className="w-4 h-4 text-brand-primary" />}
                 </button>
-                <AnimatePresence>
+                <AnimatePresence initial={false}>
                   {openFaq === i && (
                     <motion.div 
                       initial={{ height: 0, opacity: 0 }}
@@ -1446,7 +1334,7 @@ function Home() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -1506,9 +1394,6 @@ function Home() {
             >
               Claim Your Spot
             </button>
-            <p className="mt-8 text-bg-base/70 font-bold text-sm tracking-widest uppercase">
-
-            </p>
           </motion.div>
         </div>
       </section>
@@ -1540,7 +1425,7 @@ function Home() {
           <div className="flex gap-8 text-xs font-bold uppercase tracking-widest text-ink-muted">
             <a href="mailto:consultprompts@gmail.com" className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
               <Mail className="w-4 h-4" />
-              Email
+                Email
             </a>
             <a href="https://wa.me/13026622736" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
               <MessageCircle className="w-4 h-4" />
