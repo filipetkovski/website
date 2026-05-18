@@ -31,7 +31,7 @@ export default function Ebooks() {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [hasJoined, setHasJoined] = useState(false);
-  const [enrollmentCount, setEnrollmentCount] = useState(87);
+  const [enrollmentCount, setEnrollmentCount] = useState<number | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -151,7 +151,7 @@ export default function Ebooks() {
                       <div className="w-10 h-10 rounded-full bg-brand-primary/20 flex items-center justify-center flex-shrink-0">
                         <Star className="w-5 h-5 text-brand-primary fill-brand-primary" />
                       </div>
-                      <p className="text-xs font-bold uppercase tracking-widest leading-snug">First 100 slots only</p>
+                      <p className="text-xs font-bold uppercase tracking-widest leading-snug">First 300 slots only</p>
                     </div>
                   </div>
 
@@ -223,14 +223,16 @@ export default function Ebooks() {
               {/* Left: Ebook Mockup */}
               <div className="w-full lg:w-1/2 perspective-1000 text-white relative">
                 {/* Enrollment Counter */}
-                <motion.div 
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="absolute -top-4 -right-4 z-20 bg-brand-primary text-bg-base px-4 py-2 rounded-full font-display font-black italic text-sm shadow-[0_0_20px_rgba(var(--color-brand-primary),0.4)] flex items-center gap-2"
-                >
-                  <Users className="w-4 h-4" />
-                  <span>{enrollmentCount} ENROLLED</span>
-                </motion.div>
+                {enrollmentCount !== null && (
+                  <motion.div 
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="absolute -top-4 -right-4 z-20 bg-brand-primary text-bg-base px-4 py-2 rounded-full font-display font-black italic text-sm shadow-[0_0_20px_rgba(var(--color-brand-primary),0.4)] flex items-center gap-2"
+                  >
+                    <Users className="w-4 h-4" />
+                    <span>{enrollmentCount} ENROLLED</span>
+                  </motion.div>
+                )}
 
                 <div className="relative transform-gpu group-hover:rotate-y-6 transition-transform duration-700">
                   <div className="absolute -inset-2 bg-linear-to-r from-brand-primary to-brand-secondary rounded-xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity" />
