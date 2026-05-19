@@ -276,13 +276,13 @@ function Home() {
     {
       client: "Boardwalk Fries",
       quote: "The speed is insane. We saw a 40% increase in sales in the first week. The mobile version is flawless.",
-      image: "boardwalk.png",
+      image: "boardwalk.jpeg",
       business: "FAST FOOD RESTAURANT"
     },
     {
       client: "Inspire",
       quote: "Best $299 I ever spent. The mobile performance is better than my previous $3k site. Highly recommended.",
-      image: "inspire.png",
+      image: "inspire.jpeg",
       business: "BARBER SHOP"
     },
     {
