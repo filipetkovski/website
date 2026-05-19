@@ -109,8 +109,6 @@ function Home() {
   const [activePanel, setActivePanel] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHoveringHero, setIsHoveringHero] = useState(false);
 
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -273,13 +271,6 @@ function Home() {
     }
   };
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   const reviews = [
     {
@@ -930,60 +921,40 @@ function Home() {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <header 
-        id="hero" 
-        onMouseEnter={() => setIsHoveringHero(true)}
-        onMouseLeave={() => setIsHoveringHero(false)}
+      <header
+        id="hero"
         className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden min-h-[90vh] flex items-center"
       >
         {/* Modern Background Visualizations */}
         <div className="absolute inset-0 pointer-events-none">
-          {/* Main Animated Orb */}
-          <motion.div 
-            animate={{
-              x: mousePosition.x * 0.05,
-              y: mousePosition.y * 0.05,
-            }}
-            className="absolute top-1/4 -right-1/4 w-[600px] h-[600px] bg-brand-primary/10 rounded-full blur-[120px] mix-blend-screen opacity-50" 
-          />
-          <motion.div 
-            animate={{
-              x: mousePosition.x * -0.03,
-              y: mousePosition.y * -0.03,
-            }}
-            className="absolute -bottom-1/4 -left-1/4 w-[500px] h-[500px] bg-brand-primary/5 rounded-full blur-[100px] mix-blend-screen opacity-30" 
-          />
+          <motion.div className="absolute top-1/4 -right-1/4 w-[600px] h-[600px] bg-brand-primary/10 rounded-full blur-[120px] mix-blend-screen opacity-50" />
+          <motion.div className="absolute -bottom-1/4 -left-1/4 w-[500px] h-[500px] bg-brand-primary/5 rounded-full blur-[100px] mix-blend-screen opacity-30" />
           
           {/* Grid Pattern */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
           
           {/* Floating Elements */}
-          <AnimatePresence>
-            {[...Array(6)].map((_, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ 
-                  opacity: [0.1, 0.3, 0.1],
-                  scale: [1, 1.2, 1],
-                  x: Math.sin(i) * 20,
-                  y: Math.cos(i) * 20
-                }}
-                transition={{ 
-                  duration: 4 + i, 
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="absolute text-brand-primary/20"
-                style={{
-                  top: `${20 + (i * 12)}%`,
-                  left: `${15 + (i * 15)}%`,
-                }}
-              >
-                <Plus className="w-4 h-4" />
-              </motion.div>
-            ))}
-          </AnimatePresence>
+          {[...Array(3)].map((_, i) => (
+            <motion.div
+              key={i}
+              animate={{
+                opacity: [0.1, 0.3, 0.1],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: 4 + i * 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="absolute text-brand-primary/20"
+              style={{
+                top: `${20 + (i * 20)}%`,
+                left: `${15 + (i * 25)}%`,
+              }}
+            >
+              <Plus className="w-4 h-4" />
+            </motion.div>
+          ))}
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10 w-full">
@@ -1126,7 +1097,7 @@ function Home() {
               transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
               className="flex whitespace-nowrap gap-4 md:gap-10"
             >
-                {[...Array(12)].map((_, i) => (
+                {[...Array(6)].map((_, i) => (
                   <span key={i} className="text-xs md:text-2xl uppercase tracking-widest font-black text-white flex items-center gap-4 md:gap-10">
                     <Zap className="w-5 h-5 md:w-8 md:h-8 text-brand-primary fill-current" />
                     72-HOUR DELIVERY
@@ -1374,11 +1345,12 @@ function Home() {
                 className="liquid-glass flex flex-col group overflow-hidden flex-shrink-0 w-[calc(100vw-3rem)] md:w-[calc(50vw-3rem)] lg:w-auto snap-start rounded-xl relative"
               >
                 <div className="aspect-video relative overflow-hidden">
-                  <img 
-                    src={review.image} 
+                  <img
+                    src={review.image}
                     alt={review.client}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-bg-base via-bg-base/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
                   <div className="absolute top-4 left-4 liquid-glass px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-brand-primary border-brand-primary/30">
